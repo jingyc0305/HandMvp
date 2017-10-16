@@ -1,0 +1,39 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+ext {
+    compileSdk = 26
+    minSdk = 18
+    targetSdk = 26
+    support = "25.3.0"
+    buildTools = "26.0.1"
+    butterknifeVersion = "8.8.1"
+    rxjavaVersion = "2.1.0"
+    rxandroidVersion = "2.0.1"
+    rxlifecycleVersion = "2.0.1"
+    daggerVersion = "2.6"
+    retrofit2Version = "2.2.0"
+    okhttpVersion = "3.7.0"
+}
