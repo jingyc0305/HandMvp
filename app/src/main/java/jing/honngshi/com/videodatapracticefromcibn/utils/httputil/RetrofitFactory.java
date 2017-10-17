@@ -2,7 +2,6 @@ package jing.honngshi.com.videodatapracticefromcibn.utils.httputil;
 
 import java.util.concurrent.TimeUnit;
 
-import jing.honngshi.com.videodatapracticefromcibn.BuildConfig;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.api.VodApi;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -23,7 +22,6 @@ public class RetrofitFactory {
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(createHttpLoggingInterceptor())
-            //.addInterceptor(new CommonInterceptor())
             .build();
 
     private static VodApi vodService = new Retrofit.Builder()
@@ -34,8 +32,8 @@ public class RetrofitFactory {
             .build()
             .create(VodApi.class);
     private static HttpLoggingInterceptor createHttpLoggingInterceptor() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLogger());
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return loggingInterceptor;
     }
     public static VodApi getVodService() {

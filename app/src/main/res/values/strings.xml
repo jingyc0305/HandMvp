@@ -2,11 +2,11 @@
     <string name="app_name">CibnMVP</string>
 
     //main drawer
-    <string name="zhihu">点播</string>
+    <string name="zhihu">CIBN点播</string>
     <string name="wechat">直播</string>
-    <string name="gank">干货集中营</string>
-    <string name="gold">稀土掘金</string>
-    <string name="vtex">V2EX</string>
+    <string name="gank">新闻</string>
+    <string name="gold">美图</string>
+    <string name="vtex">视频</string>
     <string name="drawer_about">关于</string>
     <string name="drawer_collection">收藏</string>
     <string name="drawer_setting">设置</string>

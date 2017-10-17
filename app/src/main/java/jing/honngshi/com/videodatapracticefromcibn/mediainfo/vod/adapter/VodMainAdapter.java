@@ -9,10 +9,10 @@ import java.util.ArrayList;
  * Created by JIngYuchun on 2017/10/11.
  */
 
-public class VodAdapter extends FragmentPagerAdapter {
+public class VodMainAdapter extends FragmentPagerAdapter {
     private final ArrayList<Fragment> fragments;
 
-    public VodAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
+    public VodMainAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;
     }

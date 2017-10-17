@@ -14,14 +14,12 @@ import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.app.Constants;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
-import jing.honngshi.com.videodatapracticefromcibn.base.BaseView;
+import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.live.ui.fragment.LiveFragmentMain;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.TvSeriesContract;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter.TvSeriesPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.ui.fragment.VodFragmentMain;
 import me.yokeyword.fragmentation.SupportFragment;
 
-public class MainActivity extends BaseActivity<TvSeriesContract.ITVSeriesVodView,TvSeriesContract.ITVSeriesVodPresenter> implements NavigationView.OnNavigationItemSelectedListener, BaseView {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -47,10 +45,9 @@ public class MainActivity extends BaseActivity<TvSeriesContract.ITVSeriesVodView
     }
 
     @Override
-    public TvSeriesContract.ITVSeriesVodPresenter createPresneter() {
-        return new TvSeriesPresenter();
+    public BasePresenter createPresneter() {
+        return null;
     }
-
 
     @Override
     public int initLayout() {
@@ -95,7 +92,7 @@ public class MainActivity extends BaseActivity<TvSeriesContract.ITVSeriesVodView
      */
     @Override
     public void initData() {
-        getPresenter().getTVSeriesVodData();
+
     }
 
 
@@ -104,25 +101,12 @@ public class MainActivity extends BaseActivity<TvSeriesContract.ITVSeriesVodView
 
     }
 
-    @Override
-    public void hideLoading() {
-
-    }
 
     @Override
     public void showNetError() {
 
     }
 
-    @Override
-    public void onRefresh() {
-
-    }
-
-    @Override
-    public void onRetry() {
-
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

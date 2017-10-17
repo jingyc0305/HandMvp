@@ -13,13 +13,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvGuBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
 
 /**
  * Created by JIngYuchun on 2017/10/13.
  */
 
-public class TvGuAdapter extends BaseSectionQuickAdapter<TvGuBean.RowsBeanX,BaseViewHolder> implements BaseQuickAdapter.RequestLoadMoreListener{
+public class VodByTagAdapter extends BaseSectionQuickAdapter<VodByTagBean.RowsBeanX,BaseViewHolder> implements BaseQuickAdapter.RequestLoadMoreListener{
     private Context mContext;
 
     /**
@@ -31,13 +31,13 @@ public class TvGuAdapter extends BaseSectionQuickAdapter<TvGuBean.RowsBeanX,Base
      * @param data             A new list is created out of this one to avoid mutable list
      */
 
-    public TvGuAdapter(@LayoutRes int layoutResId, int sectionHeadResId,@Nullable List<TvGuBean.RowsBeanX> data,Context context) {
+    public VodByTagAdapter(@LayoutRes int layoutResId, int sectionHeadResId, @Nullable List<VodByTagBean.RowsBeanX> data, Context context) {
         super(layoutResId, sectionHeadResId, data);
         this.mContext = context;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TvGuBean.RowsBeanX item) {
+    protected void convert(BaseViewHolder helper, VodByTagBean.RowsBeanX item) {
         helper.setText(R.id.video_name,item.getVideoName());
         helper.setText(R.id.vod_text,String.valueOf(item.getVideoInfo().get(0).getValue()));
         ImageView iv = helper.getView(R.id.vod_imageview);
@@ -45,7 +45,7 @@ public class TvGuAdapter extends BaseSectionQuickAdapter<TvGuBean.RowsBeanX,Base
     }
 
     @Override
-    protected void convertHead(BaseViewHolder helper, TvGuBean.RowsBeanX item) {
+    protected void convertHead(BaseViewHolder helper, VodByTagBean.RowsBeanX item) {
         helper.setText(R.id.section_title_content_tv,item.header);
         helper.setVisible(R.id.section_title_more_tv, item.isMore());
         helper.addOnClickListener(R.id.section_title_more_tv);

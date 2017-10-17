@@ -1,14 +1,16 @@
 package jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean;
 
-import com.chad.library.adapter.base.entity.SectionEntity;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.util.List;
+
+import jing.honngshi.com.videodatapracticefromcibn.R;
 
 /**
  * Created by JIngYuchun on 2017/10/13.
  */
 
-public class TvGuBean{
+public class VodByTagMTBean {
 
     /**
      * orderBy : {"createdAt":"desc"}
@@ -104,7 +106,7 @@ public class TvGuBean{
         }
     }
 
-    public static class RowsBeanX  extends SectionEntity<String>{
+    public static class RowsBeanX  implements MultiItemEntity{
         /**
          * videoId : 271661
          * videoName : 思美人
@@ -147,7 +149,25 @@ public class TvGuBean{
          * rows : [{"title":"思美人72","duration":0,"isDownload":1,"pUrlId":1204783,
          * "mediaId":1204783,"isp2p":0,"vip":0,"sort":72}]
          */
-        private boolean isMore;
+        public static final int TEXT = 1;
+        public static final int IMG = 2;
+        public static final int IMG_TEXT_UP_DOWN = 3;
+        public static final int VOD_IMG_TEXT_UP_DOWN = 4;
+        public static final int IMG_TEXT_LEFT_RIGHT = 5;
+        public static final int HEADER_NAME_MORE = 6;
+
+        public static final int TEXT_SPAN_SIZE = 3;
+        public static final int IMG_SPAN_SIZE = 1;
+        public static final int IMG_TEXT_SPAN_SIZE = 4;
+        public static final int IMG_TEXT_SPAN_SIZE_MIN = 2;
+        private int itemType;
+        private int spanSize;
+        private String menuName;
+        private int menuIcon;
+        private String headerName;
+        private boolean isMenuItem;
+        private boolean isHeader;
+
         private int videoId;
         private String videoName;
         private int videoType;
@@ -182,20 +202,67 @@ public class TvGuBean{
         private String videoImageOttY;
         private List<VideoInfoBean> videoInfo;
         private List<RowsBean> rows;
-        public RowsBeanX(String s) {
-            super(s);
-        }
-        public RowsBeanX(boolean isHeader, String header, boolean isMroe) {
-            super(isHeader, header);
-            this.isMore = isMroe;
+        public RowsBeanX(boolean isMenuItem,boolean isHeader,String contentName,int itemType, int spanSize) {
+            this.itemType = itemType;
+            this.spanSize = spanSize;
+            this.isHeader = isHeader;
+            this.isMenuItem = isMenuItem;
+            if(isHeader){
+                if(contentName.equals("love")){
+                    setHeaderName("爱情");
+                }else if(contentName.equals("person")){
+                    setHeaderName("真人秀");
+                }
+            }
+            if(isMenuItem){
+
+                if(contentName.equals("love")){
+                    setMenuName("爱情");
+                    setMenuIcon(R.mipmap.love);
+                }else if(contentName.equals("person")){
+                    setMenuName("真人秀");
+                    setMenuIcon(R.mipmap.person);
+                }
+            }
         }
 
-        public boolean isMore() {
-            return isMore;
+        public void setMenuItem(boolean menuItem) {
+            isMenuItem = menuItem;
         }
 
-        public void setMore(boolean more) {
-            isMore = more;
+        public void setHeader(boolean header) {
+            isHeader = header;
+        }
+
+        public void setItemType(int itemType) {
+            this.itemType = itemType;
+        }
+
+        public void setSpanSize(int spanSize) {
+            this.spanSize = spanSize;
+        }
+
+        public void setHeaderName(String headerName) {
+            this.headerName = headerName;
+        }
+
+        public String getHeaderName() {
+            return headerName;
+        }
+        public void setMenuIcon(int menuIcon) {
+            this.menuIcon = menuIcon;
+        }
+
+        public int getMenuIcon() {
+            return menuIcon;
+        }
+
+        public String getMenuName() {
+            return menuName;
+        }
+
+        public void setMenuName(String content) {
+            this.menuName = content;
         }
 
         public int getVideoId() {
@@ -468,6 +535,14 @@ public class TvGuBean{
 
         public void setRows(List<RowsBean> rows) {
             this.rows = rows;
+        }
+
+        public int getSpanSize() {
+            return spanSize;
+        }
+        @Override
+        public int getItemType() {
+            return itemType;
         }
 
         public static class ParamsBean {

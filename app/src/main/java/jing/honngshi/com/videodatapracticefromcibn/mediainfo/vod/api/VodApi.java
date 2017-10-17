@@ -4,8 +4,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvGuBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvTypesBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagMTBean;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -43,12 +44,12 @@ public interface VodApi {
      * @return
      */
     @GET("api/v3/getCategoryTag/{categoryId}")
-   Observable<List<TvTypesBean>> getTvSeriesCategoryTag(@Path("categoryId") int categoryId,
-                                                        @Query("appOs") String appOs,
-                                                        @Query("appVer") String appVer,
-                                                        @Query("appKey") String appKey,
-                                                        @Query("osVer") String osVer,
-                                                        @Query("marketId") String marketId);
+   Observable<List<CategoryTagBean>> getTvSeriesCategoryTag(@Path("categoryId") int categoryId,
+                                                            @Query("appOs") String appOs,
+                                                            @Query("appVer") String appVer,
+                                                            @Query("appKey") String appKey,
+                                                            @Query("osVer") String osVer,
+                                                            @Query("marketId") String marketId);
 
 
     /**
@@ -65,13 +66,36 @@ public interface VodApi {
      * @return
      */
     @GET("/api/v3/getVodByTag")
-    Observable<TvGuBean> getTvGuDatas(@Query("appOs") String appOs,
-                                      @Query("appVer") String appVer,
-                                      @Query("appKey") String appKey,
-                                      @Query("osVer") String osVer,
-                                      @Query("marketId") String marketId,
-                                      @Query("page") String page,
-                                      @Query("pageSize") String pageSize,
-                                      @Query("tabletCategoryId") int tabletCategoryId,
-                                      @Query ("tagId") Integer tagId);
+    Observable<VodByTagBean> getTvGuDatas(@Query("appOs") String appOs,
+                                          @Query("appVer") String appVer,
+                                          @Query("appKey") String appKey,
+                                          @Query("osVer") String osVer,
+                                          @Query("marketId") String marketId,
+                                          @Query("page") String page,
+                                          @Query("pageSize") String pageSize,
+                                          @Query("tabletCategoryId") int tabletCategoryId,
+                                          @Query ("tagId") Integer tagId);
+    /**
+     * 根据分类和tag获取点播
+     * @param appOs
+     * @param appVer
+     * @param appKey
+     * @param osVer
+     * @param marketId
+     * @param page
+     * @param pageSize
+     * @param tabletCategoryId
+     * @param tagId
+     * @return
+     */
+    @GET("/api/v3/getVodByTag")
+    Observable<VodByTagMTBean> getVodByTagDatas(@Query("appOs") String appOs,
+                                            @Query("appVer") String appVer,
+                                            @Query("appKey") String appKey,
+                                            @Query("osVer") String osVer,
+                                            @Query("marketId") String marketId,
+                                            @Query("page") String page,
+                                            @Query("pageSize") String pageSize,
+                                            @Query("tabletCategoryId") int tabletCategoryId,
+                                            @Query ("tagId") Integer tagId);
 }

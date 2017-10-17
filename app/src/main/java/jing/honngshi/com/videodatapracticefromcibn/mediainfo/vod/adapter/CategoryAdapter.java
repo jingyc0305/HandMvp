@@ -6,20 +6,20 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import java.util.List;
 
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvTypesBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
 
 /**
  * Created by JIngYuchun on 2017/10/12.
  */
 
-public class TvTypesAdapter extends BaseQuickAdapter<TvTypesBean,BaseViewHolder> {
+public class CategoryAdapter extends BaseQuickAdapter<CategoryTagBean,BaseViewHolder> {
 
-    public TvTypesAdapter(int layoutResId , List data) {
+    public CategoryAdapter(int layoutResId , List data) {
         super(layoutResId,data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, TvTypesBean item) {
+    protected void convert(BaseViewHolder helper, CategoryTagBean item) {
 
         helper.setText(R.id.tv_series_text,item.getName());
         //helper.setImageResource(R.id.tv_series_imageView,R.mipmap.movie);

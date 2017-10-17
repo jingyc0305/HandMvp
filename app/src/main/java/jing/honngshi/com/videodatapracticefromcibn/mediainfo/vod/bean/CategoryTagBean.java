@@ -4,7 +4,7 @@ package jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean;
  * Created by JIngYuchun on 2017/10/13.
  */
 
-public class TvTypesBean {
+public class CategoryTagBean {
 
     /**
      * tagId : 160

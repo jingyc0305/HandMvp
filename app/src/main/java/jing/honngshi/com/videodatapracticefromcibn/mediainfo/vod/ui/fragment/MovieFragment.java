@@ -24,4 +24,23 @@ public class MovieFragment extends BaseFragment {
     protected void initData() {
 
     }
+
+    @Override
+    protected void initPresenter() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void showNetError() {
+
+    }
+    @Override
+    protected void initVodByTagAdapter() {
+
+    }
 }

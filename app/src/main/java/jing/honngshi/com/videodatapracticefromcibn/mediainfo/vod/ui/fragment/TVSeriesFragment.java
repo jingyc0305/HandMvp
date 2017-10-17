@@ -17,55 +17,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.adapter.TvGuAdapter;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.adapter.TvTypesAdapter;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvCommodBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvGuBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.TvTypesBean;
-import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.adapter.VodByTagAdapter;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.TvSeriesContract;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter.TvSeriesPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
 
 /**
  * Created by JIngYuchun on 2017/10/12.
  */
 
-public class TVSeriesFragment extends BaseFragment {
-
-    public TVSeriesFragment() {
-    }
-
+public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVodPresenter>
+        implements TvSeriesContract.ITVSeriesVodView {
 
     List<String> adUrlList = new ArrayList<String>();
     List<String> adTitles = new ArrayList();
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
-
     @BindView(R.id.tv_series_content_recycleview)
     RecyclerView mTvGuRecycleView;
-    TextView mTvType1;
-    TextView mTvType2;
-    TextView mTvType3;
-    TextView mTvType4;
-    TvTypesAdapter mTvSeriesAdapter;
-    TvGuAdapter mTvGuAdapter;
+    TextView tv_type1;
+    TextView tv_type2;
+    TextView tv_type3;
+    TextView tv_type4;
+    VodByTagAdapter mTvGuAdapter;
     Banner mBanner;
     View mAdView;
     View mAdBottomView;
-    private ArrayList<TvTypesBean> mDataList;
-    private ArrayList<TvGuBean.RowsBeanX> mTvGuDataList;
-    private ArrayList<TvCommodBean> mTestDataList;
-    private String [] tv_types = new String[]{"古装正剧","历史人物","爱情","真人秀"};
-    private int [] tv_type_ids = new int[]{160,153,1,19};
-    private int tv_categoryId = 0;
+    private ArrayList<VodByTagBean.RowsBeanX> mTvGuDataList;
+    private String[] tv_types = new String[]{"古装正剧", "历史人物", "爱情", "真人秀"};
+    private int[] tv_type_ids = new int[]{160, 153, 1, 19};
 
     private View errorView;
+
+    private TvSeriesContract.ITVSeriesVodPresenter mITVSeriesVodPresenter;
+
     @Override
     protected int initLayout() {
         return R.layout.tv_series_fragment_layout;
@@ -91,11 +80,12 @@ public class TVSeriesFragment extends BaseFragment {
         adTitles.add("斯里兰卡铁路罢工 乘客挂火车人满为患");
 
         mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_banner_layout, null);
-        mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout, null);
-        mTvType1 = mAdView.findViewById(R.id.tv_type1);
-        mTvType2 = mAdView.findViewById(R.id.tv_type2);
-        mTvType3 = mAdView.findViewById(R.id.tv_type3);
-        mTvType4 = mAdView.findViewById(R.id.tv_type4);
+        mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
+                null);
+        tv_type1 = mAdView.findViewById(R.id.tv_type1);
+        tv_type2= mAdView.findViewById(R.id.tv_type2);
+        tv_type3 = mAdView.findViewById(R.id.tv_type3);
+        tv_type4 = mAdView.findViewById(R.id.tv_type4);
         mBanner = mAdView.findViewById(R.id.banner);
         mBanner.setImages(adUrlList);
         mBanner.setBannerTitles(adTitles);
@@ -108,42 +98,48 @@ public class TVSeriesFragment extends BaseFragment {
 
         initTvGuAdapter();
     }
-    private void initTvSeriesAdapter(){
-//        mSwipeRefreshLayout.setEnabled(false);
+
+    private void initTvSeriesAdapter() {
+        //        mSwipeRefreshLayout.setEnabled(false);
         //解决swipelayout与Recyclerview的冲突
-//        mTvTypeRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//
-//                int topRowVerticalPosition =
-//                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
-//                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
-//            }
-//
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//            }
-//        });
+        //        mTvTypeRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        //            @Override
+        //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        //
+        //                int topRowVerticalPosition =
+        //                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0
+        // : recyclerView.getChildAt(0).getTop();
+        //                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+        //            }
+        //
+        //            @Override
+        //            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        //                super.onScrollStateChanged(recyclerView, newState);
+        //            }
+        //        });
 
     }
-    private void initTvGuAdapter(){
-        mTvGuAdapter = new TvGuAdapter(R.layout.vod_tv_item,R.layout.vod_tv_title_section_more,mTvGuDataList,getContext());
+
+    private void initTvGuAdapter() {
+        mTvGuAdapter = new VodByTagAdapter(R.layout.vod_tv_item, R.layout.vod_tv_title_section_more,
+                mTvGuDataList, getContext());
         mTvGuAdapter.addHeaderView(mAdView);
         mTvGuAdapter.addFooterView(mAdBottomView);
         mTvGuAdapter.openLoadAnimation();
-        mTvGuRecycleView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        mTvGuRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mTvGuRecycleView.setAdapter(mTvGuAdapter);
 
-        errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup) mTvGuRecycleView.getParent(), false);
+        errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
+                mTvGuRecycleView.getParent(), false);
         errorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 try {
-                    getGuDatas();
-                }catch (Exception e){
-                    mTvGuAdapter.setEmptyView(R.layout.empty_view,(ViewGroup) mTvGuRecycleView.getParent());
+                    mITVSeriesVodPresenter.getTVSeriesDetailData();
+                } catch (Exception e) {
+                    mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView
+                            .getParent());
                 }
 
             }
@@ -160,122 +156,77 @@ public class TVSeriesFragment extends BaseFragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getGuDatas();
+                mITVSeriesVodPresenter.getTVSeriesDetailData();
             }
         });
 
     }
+
     @Override
     protected void initData() {
-        mTvGuAdapter.setEmptyView(R.layout.loading_view,(ViewGroup) mTvGuRecycleView.getParent());
-        //获取电视剧下的栏目菜单
-        RetrofitFactory.getVodService().getTvSeriesCategoryTag(9, "Android", "2.0","MzljMjU0N2UwYjk3",
-                "6.0.1", "com.sumavision.sanping.gudou")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        //加载电视剧下的栏目分类
+        mITVSeriesVodPresenter.getTvSeriseTypeData();
+        //加载 "古装正剧" 栏目下的所有节目 或者是电视剧下所有分类的所有节目 根据是否传具体分类的ID决定
+        mITVSeriesVodPresenter.getTVSeriesDetailData();
+    }
 
-                .subscribe(new Observer<List<TvTypesBean>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
+    @Override
+    protected void initPresenter() {
+        //初始化 P层 后面使用dagger 代替
+        mITVSeriesVodPresenter = new TvSeriesPresenter(this);
+    }
 
-                    }
+    @Override
+    public void showNetError() {
+        //显示加载失败视图
+        mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView.getParent());
+    }
 
-                    @Override
-                    public void onNext(@NonNull List<TvTypesBean> tvSeriesBean) {
-                        mDataList = new ArrayList<>();
-//                        for (int i = 0; i < tvSeriesBean.size(); i++) {
-//                            TvTypesBean item = new TvTypesBean();
-//                            item.setTagId(tvSeriesBean.get(i).getTagId());
-//                            item.setName(tvSeriesBean.get(i).getName());
-//                            mDataList.add(item);
-//                  }
-                        tv_categoryId = tvSeriesBean.get(0).getTagId();
-
-                        mTvType1.setText(tvSeriesBean.get(0).getName());
-                        mTvType2.setText(tvSeriesBean.get(1).getName());
-                        mTvType3.setText(tvSeriesBean.get(2).getName());
-                        mTvType4.setText(tvSeriesBean.get(3).getName());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        mTvGuAdapter.setEmptyView(R.layout.empty_view,(ViewGroup) mTvGuRecycleView.getParent());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        getGuDatas();
-                    }
-                });
-
-
+    @Override
+    public void showLoading() {
+        //显示正在加载视图
+        mTvGuAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mTvGuRecycleView.getParent());
     }
 
 
-    /**
-     * 获取古装正剧具体数据
-     */
-    private void getGuDatas(){
-        //获取分类下的数据 古装正剧
-        RetrofitFactory.getVodService().getTvGuDatas("Android", "2.0","MzljMjU0N2UwYjk3",
-                "6.0.1", "com.sumavision.sanping.gudou","1","10",9,tv_categoryId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<TvGuBean>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                    }
+    @Override
+    public void showData(ArrayList<VodByTagBean.RowsBeanX> mTvGuDataList) {
+        //装载数据
+        mTvGuAdapter.setNewData(mTvGuDataList);
+        //刷新列表显示数据
+        mTvGuAdapter.notifyDataSetChanged();
+        //缓存网络数据
+        mITVSeriesVodPresenter.cacheTVSeriesVodData();
+    }
 
-                    @Override
-                    public void onNext(@NonNull TvGuBean tvGuBean) {
-                        mTvGuDataList = new ArrayList<>();
-                        for (int i = 0; i < tvGuBean.getRows().size(); i++) {
-                            TvGuBean item = new TvGuBean();
-                            item.setRows(tvGuBean.getRows());
-                            item.getRows().get(i).setVideoName(tvGuBean.getRows().get(i).getVideoName());
-                            item.getRows().get(i).setVideoImage(tvGuBean.getRows().get(i).getVideoImageOttY());
-                            mTvGuDataList.add(new TvGuBean.RowsBeanX(true, "古装正剧", true));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(new TvGuBean.RowsBeanX(true, "历史人物", true));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(new TvGuBean.RowsBeanX(true, "爱情", true));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(new TvGuBean.RowsBeanX(true, "真人秀", true));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                            mTvGuDataList.add(item.getRows().get(i));
-                        }
-                        mTvGuAdapter.setNewData(mTvGuDataList);
-                        mTvGuAdapter.notifyDataSetChanged();
-                    }
+    @Override
+    public void onDataSucess() {
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                    }
+        //停止下拉刷新动画
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 
-                    @Override
-                    public void onComplete() {
+    @Override
+    public void onShowCategoryName(List<CategoryTagBean> tvTypesBeen) {
+        //显示电视剧下的类别名称
+        if(tvTypesBeen.size() == 0 || tvTypesBeen == null){
+            //来自本地
+            tv_type1.setText(tv_types[0]);
+            tv_type2.setText(tv_types[1]);
+            tv_type3.setText(tv_types[2]);
+            tv_type4.setText(tv_types[3]);
+        }else {
+            //来自服务器
+            tv_type1.setText(tvTypesBeen.get(0).getName());
+            tv_type2.setText(tvTypesBeen.get(1).getName());
+            tv_type3.setText(tvTypesBeen.get(2).getName());
+            tv_type4.setText(tvTypesBeen.get(3).getName());
+        }
 
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+    }
+
+    @Override
+    protected void initVodByTagAdapter() {
+
     }
 }

@@ -6,6 +6,9 @@ import android.app.Application;
 import java.util.HashSet;
 import java.util.Set;
 
+import jing.honngshi.com.videodatapracticefromcibn.BuildConfig;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.LogUtil;
+
 /**
  * Created by JIngYuchun on 2017/10/11.
  */
@@ -14,7 +17,6 @@ public class App extends Application {
 
     private Set<Activity> allActivities;
     private static App instance;
-
     public static synchronized App getInstance() {
         return instance;
     }
@@ -23,6 +25,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //初始化logger
+        LogUtil.init(BuildConfig.APP_DEBUG);
     }
 
     public void addActivity(Activity act) {

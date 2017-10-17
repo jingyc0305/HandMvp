@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import jing.honngshi.com.videodatapracticefromcibn.widget.Loadview;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Created by JIngYuchun on 2017/10/11.
  */
 
-public abstract class BaseFragment<T extends BasePresenter> extends SupportFragment implements Loadview.OnRetryListener {
+public abstract class BaseFragment<T extends BasePresenter> extends SupportFragment implements
+        BaseView {
 
 
     @Inject
@@ -38,18 +38,24 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
+            Bundle savedInstanceState) {
         if (mRootView == null) {
             mRootView = inflater.inflate(initLayout(), null);
             ButterKnife.bind(this, mRootView);
-           // initInjector();
+            // initInjector();
             initView();
+            initVodByTagAdapter();
+            initPresenter();
             initData();
-           // initSwipeRefresh();
+            // initSwipeRefresh();
         }
         ViewGroup parent = (ViewGroup) mRootView.getParent();
         if (parent != null) {
             parent.removeView(mRootView);
+        }
+        if(mPresenter != null){
+            mPresenter.attachView(this);
         }
         return mRootView;
     }
@@ -59,7 +65,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         super.onActivityCreated(savedInstanceState);
         if (getUserVisibleHint() && mRootView != null && !mIsMulti) {
             mIsMulti = true;
-            //updateViews(false);
         }
     }
 
@@ -67,20 +72,24 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser && isVisible() && mRootView != null && !mIsMulti) {
             mIsMulti = true;
-            //updateViews(false);
         } else {
             super.setUserVisibleHint(isVisibleToUser);
         }
     }
 
 
-
     @Override
-    public void onRetry() {
-        //updateViews(false);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
-
+    @Override
+    public void onDestroyView() {
+        if (mPresenter != null) {
+            mPresenter.dettachView();
+        }
+        super.onDestroyView();
+    }
 
     /**
      * 初始化 Toolbar
@@ -90,16 +99,16 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      * @param title
      */
     protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
-        ((BaseActivity)getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
+        ((BaseActivity) getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
     }
 
 
     /**
      * 绑定布局文件
-     * @return  布局文件ID
+     *
+     * @return 布局文件ID
      */
     protected abstract int initLayout();
-
 
 
     /**
@@ -111,4 +120,14 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      * 初始化数据
      */
     protected abstract void initData();
+
+    /**
+     * 初始化Presenter
+     */
+    protected abstract void initPresenter();
+
+    /**
+     * 初始化adapter
+     */
+    protected abstract void initVodByTagAdapter();
 }

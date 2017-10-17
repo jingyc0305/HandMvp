@@ -7,7 +7,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="240dp"
+        android:layout_height="280dp"
         android:layout_margin="8dp"
         android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/colorCard"
@@ -24,9 +24,9 @@
             android:id="@+id/vod_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|start"
             android:layout_margin="8dp"
-            android:textColor="#D2691E"
+            android:textColor="@android:color/white"
             android:textSize="20sp"/>
 
         <View
