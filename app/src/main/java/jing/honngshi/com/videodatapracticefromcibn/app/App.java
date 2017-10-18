@@ -3,6 +3,9 @@ package jing.honngshi.com.videodatapracticefromcibn.app;
 import android.app.Activity;
 import android.app.Application;
 
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +30,10 @@ public class App extends Application {
         instance = this;
         //初始化logger
         LogUtil.init(BuildConfig.APP_DEBUG);
+        //初始化QQ平台
+        PlatformConfig.setQQZone("1106406334", "snGN26dsQXCT7IyE");
+        //初始化友盟
+        UMShareAPI.get(this);
     }
 
     public void addActivity(Activity act) {

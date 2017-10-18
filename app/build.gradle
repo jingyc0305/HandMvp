@@ -52,9 +52,7 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
     compile "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}"
     //compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-
     //compile "com.trello:rxlifecycle2:rxlifecycle-android:${rxlifecycleVersion}"
-
     //compile "com.trello:rxlifecycle2-components:${rxlifecycleVersion}"
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
     // dagger
@@ -72,4 +70,13 @@ dependencies {
     //最新版本
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile files('libs/SocialSDK_QQ_Simplify.jar')
+    compile files('libs/SocialSDK_Sina_Simplify.jar')
+    compile files('libs/SocialSDK_WeChat_Simplify.jar')
+    compile files('libs/umeng_shareboard_widget.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_shareboard.jar')
+    compile files('libs/umeng_social_shareview.jar')
+    compile files('libs/umeng_social_tool.jar')
 }
