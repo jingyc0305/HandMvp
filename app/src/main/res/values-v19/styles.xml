@@ -1,0 +1,11 @@
+<resources>
+
+    <!--values-v19。v19 开始有 android:windowTranslucentStatus 这个属性-->
+    <style name="AppTheme.TranslucentStatusBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+
+</resources>

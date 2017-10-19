@@ -70,6 +70,13 @@ dependencies {
     //最新版本
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    //permission
+    compile 'com.github.hotchemi:permissionsdispatcher:3.0.1'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.0.1'
+
+    //stutas bar
+    compile 'com.kelin.translucentbar:library:0.8.0'
+    //umshare
     compile files('libs/SocialSDK_QQ_Simplify.jar')
     compile files('libs/SocialSDK_Sina_Simplify.jar')
     compile files('libs/SocialSDK_WeChat_Simplify.jar')

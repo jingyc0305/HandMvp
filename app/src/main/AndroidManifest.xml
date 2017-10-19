@@ -18,16 +18,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name=".app.App"
-        android:theme="@style/MainTheme">
-        <activity android:name=".home.MainActivity">
-
-        </activity>
-        <activity android:name=".login.LoginActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".home.MainActivity"
+            android:theme="@style/AppTheme.TranslucentStatusBar"/>
+        <activity android:name=".home.SplashActivity"
+                  android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".login.LoginActivity"
+                  android:theme="@style/AppTheme.TranslucentStatusBar">
         </activity>
         <!--qq精简版-->
         <activity

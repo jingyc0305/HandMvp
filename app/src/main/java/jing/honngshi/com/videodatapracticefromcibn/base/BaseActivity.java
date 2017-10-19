@@ -7,6 +7,7 @@ import android.view.View;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import jing.honngshi.com.videodatapracticefromcibn.app.App;
 import me.yokeyword.fragmentation.SupportActivity;
 
 /**
@@ -22,6 +23,7 @@ public abstract class BaseActivity<V extends BaseView, P extends BasePresenter> 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getInstance().addActivity(this);
         if (this.mPresenter == null) {
             this.mPresenter = createPresneter();
             if(this.mPresenter != null){
@@ -96,7 +98,6 @@ public abstract class BaseActivity<V extends BaseView, P extends BasePresenter> 
             }
         });
     }
-
     @Override
     public void showLoading() {
 
@@ -115,5 +116,6 @@ public abstract class BaseActivity<V extends BaseView, P extends BasePresenter> 
             this.mPresenter.dettachView();
         }
         mUnBinder.unbind();
+        App.getInstance().removeActivity(this);
     }
 }

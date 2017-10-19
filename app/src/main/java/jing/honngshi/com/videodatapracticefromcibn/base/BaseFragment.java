@@ -47,7 +47,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
             initView();
             initVodByTagAdapter();
             initPresenter();
-            initData();
             // initSwipeRefresh();
         }
         ViewGroup parent = (ViewGroup) mRootView.getParent();
@@ -61,28 +60,18 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     }
 
     @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+        initData();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getUserVisibleHint() && mRootView != null && !mIsMulti) {
             mIsMulti = true;
         }
     }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser && isVisible() && mRootView != null && !mIsMulti) {
-            mIsMulti = true;
-        } else {
-            super.setUserVisibleHint(isVisibleToUser);
-        }
-    }
-
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     @Override
     public void onDestroyView() {
         if (mPresenter != null) {

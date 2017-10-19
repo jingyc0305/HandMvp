@@ -10,6 +10,7 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:scrollbars="none">
 
         <LinearLayout
@@ -47,6 +48,8 @@
             android:layout_width="280dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+
+            android:fitsSystemWindows="true"
             app:menu="@menu/nav_drawer_menu">
         </android.support.design.widget.NavigationView>
     </android.support.v4.widget.DrawerLayout>

@@ -1,11 +1,14 @@
 package jing.honngshi.com.videodatapracticefromcibn.login;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.kelin.translucentbar.library.TranslucentBarManager;
 import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -17,6 +20,8 @@ import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.home.MainActivity;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.StatusBarUtil;
+
 
 /**
  * Created by JIngYuchun on 2017/10/18.
@@ -36,7 +41,17 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
     LoginPresenter mLoginPresenter;
 
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //沉浸式状态栏
+        TranslucentBarManager translucentBarManager = new TranslucentBarManager(this);
+        translucentBarManager.transparent(LoginActivity.this, R.color.login_statusbar_color);
+        //设置登录页面顶部状态栏文字为黑色 因为背景为白色
+        StatusBarUtil.setStatusBarLightMode(this,android.R.color.background_dark);
 
+
+    }
     @Override
     public LoginContract.ILoginPresenter createPresneter() {
         return mLoginPresenter = new LoginPresenter(LoginActivity.this,LoginActivity.this);
@@ -126,7 +141,7 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
             }
             //result.setText(temp);
             Logger.i(temp);
-            loginSucess(data.get("name"),data.get("profile_image_url"));
+            loginSucess(data.get("profile_image_url"),data.get("name"));
         }
 
         @Override

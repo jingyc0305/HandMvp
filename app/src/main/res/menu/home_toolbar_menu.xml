@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/toolbar_login"
-        android:icon="@mipmap/login"
-        android:title="登录"
-        android:orderInCategory="0"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/toolbar_login"-->
+        <!--android:icon="@mipmap/login"-->
+        <!--android:title="登录"-->
+        <!--android:orderInCategory="0"-->
+        <!--app:showAsAction="always" />-->
 
     <item
         android:id="@+id/toolbar_share"

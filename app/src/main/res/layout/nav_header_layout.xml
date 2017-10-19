@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="@dimen/nav_header_height"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:background="@color/colorPrimaryDark"
+             android:background="@color/colorPrimary"
              android:gravity="center"
              android:orientation="vertical">
 

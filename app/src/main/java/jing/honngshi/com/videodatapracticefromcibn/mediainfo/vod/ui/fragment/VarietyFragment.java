@@ -25,6 +25,7 @@ import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagMT
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.VarietyContract;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter.VarietyPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
+import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
 
 /**
  * Created by JIngYuchun on 2017/10/12.
@@ -78,6 +79,14 @@ public class VarietyFragment extends BaseFragment<VarietyContract.IVarietyVodPre
         mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_variety_banner_layout, null);
         mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
                 null);
+
+    }
+
+    /**
+     * adapter 相关设置
+     */
+    @Override
+    protected void initVodByTagAdapter() {
         //初始化banner 对象
         mBanner = mAdView.findViewById(R.id.banner);
         mBanner.setImages(adUrlList);
@@ -88,19 +97,12 @@ public class VarietyFragment extends BaseFragment<VarietyContract.IVarietyVodPre
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.start();
-
-    }
-
-    /**
-     * adapter 相关设置
-     */
-    @Override
-    protected void initVodByTagAdapter() {
+        //初始化adapter
         mVodByTagMTAdapter = new VodByTagMTAdapter(mRowsBeanXes);
         mVodByTagMTAdapter.addHeaderView(mAdView);
         mVodByTagMTAdapter.addFooterView(mAdBottomView);
         mVodByTagMTAdapter.openLoadAnimation();
-        mVarietyRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 6));
+        mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 6));
         //设置dapater多类型数据
         mVodByTagMTAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
             @Override

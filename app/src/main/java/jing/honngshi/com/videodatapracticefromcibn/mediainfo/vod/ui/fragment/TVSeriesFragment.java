@@ -2,7 +2,6 @@ package jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.ui.fragment;
 
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +19,12 @@ import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.adapter.VodByTagAdapter;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.TvSeriesContract;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter.TvSeriesPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
+import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
 
 /**
  * Created by JIngYuchun on 2017/10/12.
@@ -126,7 +126,7 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
         mTvGuAdapter.addHeaderView(mAdView);
         mTvGuAdapter.addFooterView(mAdBottomView);
         mTvGuAdapter.openLoadAnimation();
-        mTvGuRecycleView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mTvGuRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 3));
         mTvGuRecycleView.setAdapter(mTvGuAdapter);
 
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
@@ -146,7 +146,7 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
         });
         //设置刷新球颜色
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.YELLOW);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.parseColor("#BBFFFF"));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {

@@ -2,6 +2,7 @@ package jing.honngshi.com.videodatapracticefromcibn.widget;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 /**
  * Created by JIngYuchun on 2017/10/13.
@@ -14,6 +15,15 @@ public class MyGridLayoutManger extends GridLayoutManager {
     }
     public void setScrollEnabled(boolean flag) {
         this.isScrollEnabled = flag;
+    }
+
+    @Override
+    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        try {
+            super.onLayoutChildren(recycler, state);
+        }catch (IndexOutOfBoundsException  e){
+            e.printStackTrace();
+        }
     }
 
     @Override
