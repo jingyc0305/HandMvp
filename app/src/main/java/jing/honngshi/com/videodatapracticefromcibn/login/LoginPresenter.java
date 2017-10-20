@@ -22,11 +22,11 @@ public class LoginPresenter extends AbsBasePresenter<LoginContract.ILoginView> i
     }
 
     @Override
-    public void loginFromThird(UMAuthListener umAuthListener) {
+    public void loginFromThird(UMAuthListener umAuthListener,SHARE_MEDIA platform) {
         //授权
         //UMShareAPI.get(MainActivity.this).doOauthVerify(MainActivity.this, SHARE_MEDIA.QQ, authListener);
         //获取用户资料
-        UMShareAPI.get(mContext).getPlatformInfo(mContext, SHARE_MEDIA.QQ, umAuthListener);
+        UMShareAPI.get(mContext).getPlatformInfo(mContext, platform, umAuthListener);
     }
 
     @Override

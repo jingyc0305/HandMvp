@@ -4,8 +4,8 @@
               android:layout_height="match_parent"
                 android:background="@color/colorPrimary">
 
-    <TextView
-        android:id="@+id/textView8"
+    <com.king.view.supertextview.SuperTextView
+        android:id="@+id/home_page_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

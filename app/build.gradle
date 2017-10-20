@@ -76,6 +76,8 @@ dependencies {
 
     //stutas bar
     compile 'com.kelin.translucentbar:library:0.8.0'
+    //supertextview
+    compile 'com.king.view:supertextview:1.0.1'
     //umshare
     compile files('libs/SocialSDK_QQ_Simplify.jar')
     compile files('libs/SocialSDK_Sina_Simplify.jar')

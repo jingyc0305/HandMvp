@@ -8,7 +8,7 @@ import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import jing.honngshi.com.videodatapracticefromcibn.app.App;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.AbsBasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.NetUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.OkHttpImageDownloader;
@@ -42,7 +42,7 @@ public class SplashPresenter extends AbsBasePresenter<SplashContract.ISplashView
 
                     @Override
                     public void onNext(@NonNull SplashEntity splashEntity) {
-                        if (NetUtil.isWifi(App.getInstance().getApplicationContext())){
+                        if (NetUtil.isWifi(JingApp.getInstance().getApplicationContext())){
                             if (splashEntity != null){
                                 List<String> imgs = splashEntity.getImages();
                                 for (String url:imgs) {

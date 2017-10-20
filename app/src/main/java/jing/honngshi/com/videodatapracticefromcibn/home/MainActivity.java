@@ -37,18 +37,23 @@ import com.umeng.socialize.utils.ShareBoardlistener;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.app.Constants;
+import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.login.LoginActivity;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.live.ui.fragment.LiveFragmentMain;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.ui.fragment.VodFragmentMain;
-import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.Consnts;
+import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.httpCommon;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PermissionUtil;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
 import me.yokeyword.fragmentation.SupportFragment;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 @RuntimePermissions
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,MainContract.IMainView {
@@ -66,8 +71,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     LiveFragmentMain mLiveFragment;
     ActionBarDrawerToggle mDrawerToggle;
 
-    private int hideFragment = Constants.TYPE_LIVE;
-    private int showFragment = Constants.TYPE_VOD;
+    private int hideFragment = AppCommon.TYPE_LIVE;
+    private int showFragment = AppCommon.TYPE_VOD;
     ShareAction mShareAction;
     ShareBoardConfig config;
     UMWeb shareWebSit ;
@@ -76,20 +81,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     String avatar_url,user_nickname;
 
     MainPresenter mMainPresenter;
+    private boolean isHasPremission = false;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(PermissionUtil.isAppliedPermission(this,Manifest.permission.READ_PHONE_STATE)&&
+                PermissionUtil.isAppliedPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)&&
+                PermissionUtil.isAppliedPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)&&
+                PermissionUtil.isAppliedPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)){
+            isHasPremission = true;
+        }
+        //请求权限
+        if(!isHasPremission){
+            MainActivityPermissionsDispatcher.getMainMultiPermissionWithPermissionCheck(this);
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //沉浸式状态栏
         TranslucentBarManager translucentBarManager = new TranslucentBarManager(this);
         translucentBarManager.translucent(this);
-        //请求权限
-        MainActivityPermissionsDispatcher.getMainMultiPermissionWithPermissionCheck(this);
-        //获取第三方登录返回用户资料数据
-        avatar_url = getIntent().getStringExtra("avatar_url");//获取头像 来自第三方登录
-        user_nickname = getIntent().getStringExtra("user_nickname");//获取昵称信息
-        //设置用户头像和昵称
-        showUserInfo();
-        hideFragment = Constants.TYPE_LIVE;
+
+        hideFragment = AppCommon.TYPE_LIVE;
         showHideFragment(getTargetFragment(showFragment), getTargetFragment(hideFragment));
         mNavigationView.getMenu().findItem(R.id.drawer_zhihu).setChecked(true);
         mToolbar.setTitle(mNavigationView.getMenu().findItem(getCurrentItem(showFragment)).getTitle().toString());
@@ -104,12 +119,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         if(share_media == SHARE_MEDIA.QQ){
                             //Toast.makeText(MainActivity.this,"点击了QQ分享",Toast.LENGTH_SHORT).show();
                         }
-                        shareWebSit.setTitle(Consnts.title);
-                        shareWebSit.setThumb(new UMImage(MainActivity.this,Consnts.imageurl));
-                        shareWebSit.setDescription(Consnts.text);
+                        shareWebSit.setTitle(httpCommon.title);
+                        shareWebSit.setThumb(new UMImage(MainActivity.this, httpCommon.imageurl));
+                        shareWebSit.setDescription(httpCommon.text);
 
                         mUMVideo.setTitle("战狼Ⅱ");//视频的标题
-                        mUMVideo.setThumb(new UMImage(MainActivity.this, Consnts.imageurl));//视频的缩略图
+                        mUMVideo.setThumb(new UMImage(MainActivity.this, httpCommon.imageurl));//视频的缩略图
                         mUMVideo.setDescription("吴京执导的动作军事电影，由吴京、弗兰克·格里罗、吴刚、张翰、卢靖姗、淳于珊珊、丁海峰等主演");//视频的描述
 
                         mShareAction
@@ -160,9 +175,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar, R.string.drawer_open,R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        shareWebSit = new UMWeb(Consnts.url);
-        mUMusic = new UMusic(Consnts.musicurl);
-        mUMVideo = new UMVideo(Consnts.videourl);
+        shareWebSit = new UMWeb(httpCommon.url);
+        mUMusic = new UMusic(httpCommon.musicurl);
+        mUMVideo = new UMVideo(httpCommon.videourl);
 
         config = new ShareBoardConfig();
         config.setShareboardPostion(ShareBoardConfig.SHAREBOARD_POSITION_BOTTOM); // 底部弹出
@@ -174,10 +189,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.drawer_zhihu:
-                        showFragment = Constants.TYPE_VOD;
+                        showFragment = AppCommon.TYPE_VOD;
                         break;
                     case R.id.drawer_wechat:
-                        showFragment = Constants.TYPE_LIVE;
+                        showFragment = AppCommon.TYPE_LIVE;
                         break;
 
                 }
@@ -197,6 +212,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      */
     @Override
     public void initData() {
+        //获取第三方登录返回用户资料数据
+        avatar_url = getIntent().getStringExtra("avatar_url");//获取头像 来自第三方登录
+        user_nickname = getIntent().getStringExtra("user_nickname");//获取昵称信息
+        //设置用户头像和昵称
+        if(mMainPresenter!=null){
+            mMainPresenter.UpdateUserInfo();
+        }else{
+            showUserInfo();
+        }
     }
 
 
@@ -219,9 +243,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
     private SupportFragment getTargetFragment(int item) {
         switch (item) {
-            case Constants.TYPE_VOD:
+            case AppCommon.TYPE_VOD:
                 return mVodFragment;
-            case Constants.TYPE_LIVE:
+            case AppCommon.TYPE_LIVE:
                 return mLiveFragment;
         }
         return mVodFragment;
@@ -229,9 +253,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private int getCurrentItem(int item) {
         switch (item) {
-            case Constants.TYPE_VOD:
+            case AppCommon.TYPE_VOD:
                 return R.id.drawer_zhihu;
-            case Constants.TYPE_LIVE:
+            case AppCommon.TYPE_LIVE:
                 return R.id.drawer_wechat;
         }
         return R.id.drawer_zhihu;
@@ -302,13 +326,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void showUserInfo() {
-        Glide.with(this).load(avatar_url).into(userAvatar);
-        userNickName.setText(user_nickname);
+        String accessToken = PreferenceUtils.getPrefString(MainActivity.this,AppCommon.ACESSTOKEN_QQ,null);
+        if(null != accessToken && !"".equals(accessToken)){
+            Glide.with(this).load(avatar_url).into(userAvatar);
+            userNickName.setText(user_nickname);
+        }else{
+            //后面加入有效期判断
+            userAvatar.setImageResource(R.mipmap.avatar);
+            userNickName.setText("未登录");
+        }
     }
 
     @NeedsPermission(
             {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    ACCESS_FINE_LOCATION,
                     Manifest.permission.CALL_PHONE,
                     Manifest.permission.READ_LOGS,
                     Manifest.permission.READ_PHONE_STATE,
@@ -317,6 +348,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     Manifest.permission.GET_ACCOUNTS,
                     Manifest.permission.WRITE_APN_SETTINGS})
     void getMainMultiPermission() {
+        isHasPremission = true;
     }
 
     @OnShowRationale({Manifest.permission.READ_EXTERNAL_STORAGE})
@@ -353,7 +385,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             } else {
                 if (System.currentTimeMillis() - mLastClickTime <= 2000L) {
-                    super.onBackPressed();
+                    JingApp.getInstance().exitApp();
                 } else {
                     mLastClickTime = System.currentTimeMillis();
                     Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();

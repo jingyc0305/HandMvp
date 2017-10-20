@@ -16,11 +16,11 @@ import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.LogUtil;
  * Created by JIngYuchun on 2017/10/11.
  */
 
-public class App extends Application {
+public class JingApp extends Application {
 
     private Set<Activity> allActivities;
-    private static App instance;
-    public static synchronized App getInstance() {
+    private static JingApp instance;
+    public static synchronized JingApp getInstance() {
         return instance;
     }
 
@@ -32,6 +32,8 @@ public class App extends Application {
         LogUtil.init(BuildConfig.APP_DEBUG);
         //初始化QQ平台
         PlatformConfig.setQQZone("1106406334", "snGN26dsQXCT7IyE");
+        //初始化微博平台
+        PlatformConfig.setSinaWeibo("85580524", "3ea78b582a57e200592415f61f073cc3","http://open.weibo.com/apps/85580524/privilege/oauth");
         //初始化友盟
         UMShareAPI.get(this);
     }

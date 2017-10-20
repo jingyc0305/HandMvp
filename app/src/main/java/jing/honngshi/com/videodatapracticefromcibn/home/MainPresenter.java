@@ -15,6 +15,6 @@ public class MainPresenter extends AbsBasePresenter<MainContract.IMainView> impl
 
     @Override
     public void UpdateUserInfo() {
-
+        mIMainView.showUserInfo();
     }
 }

@@ -18,8 +18,10 @@ import java.util.Map;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
+import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.home.MainActivity;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.StatusBarUtil;
 
 
@@ -76,10 +78,11 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
     }
 
     @Override
-    public void loginSucess(String imgUrl,String nickname) {
+    public void loginSucess(String loginType,ThirdLoginBean mThirdLoginBean) {
         Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_LONG).show();
+        PreferenceUtils.setPrefString(this,loginType,mThirdLoginBean.getAccessToken());
         //进入主页
-        gotoMainActivity(imgUrl,nickname);
+        gotoMainActivity(mThirdLoginBean.getProfile_image_url(),mThirdLoginBean.getName());
     }
 
     @Override
@@ -96,13 +99,14 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
                 break;
             case R.id.login_qq_imageView:
                 //通过QQ平台登录
-                mLoginPresenter.loginFromThird(authListener);
+                mLoginPresenter.loginFromThird(authListener,SHARE_MEDIA.QQ);
                 break;
             case R.id.login_wechat_imageView:
                 //通过微信平台登录
                 break;
             case R.id.login_sina_imageView:
                 //通过新浪微博平台登录
+                mLoginPresenter.loginFromThird(authListener,SHARE_MEDIA.SINA);
                 break;
         }
     }
@@ -141,7 +145,27 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
             }
             //result.setText(temp);
             Logger.i(temp);
-            loginSucess(data.get("profile_image_url"),data.get("name"));
+            ThirdLoginBean mThirdLoginBean = new ThirdLoginBean();
+            mThirdLoginBean.setName(data.get("name"));
+            mThirdLoginBean.setScreen_name(data.get("screen_name"));
+            mThirdLoginBean.setAccessToken(data.get("accessToken"));
+            mThirdLoginBean.setOpenid(data.get("openid"));
+            mThirdLoginBean.setUid(data.get("uid"));
+            mThirdLoginBean.setGender(data.get("gender"));
+            mThirdLoginBean.setProfile_image_url(data.get("profile_image_url"));
+            switch (platform){
+                case QQ:
+                    loginSucess(AppCommon.ACESSTOKEN_QQ,mThirdLoginBean);
+                    break;
+                case WEIXIN:
+                    loginSucess(AppCommon.ACESSTOKEN_WeChat,mThirdLoginBean);
+                    break;
+                case SINA:
+                    loginSucess(AppCommon.ACESSTOKEN_Sina,mThirdLoginBean);
+                    break;
+
+            }
+
         }
 
         @Override

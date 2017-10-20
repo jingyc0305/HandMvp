@@ -47,7 +47,7 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
     Banner mBanner;
     View mAdView;
     View mAdBottomView;
-    private ArrayList<VodByTagBean.RowsBeanX> mTvGuDataList;
+    ArrayList<VodByTagBean.RowsBeanX> mTvGuDataList;
     private String[] tv_types = new String[]{"古装正剧", "历史人物", "爱情", "真人秀"};
     private int[] tv_type_ids = new int[]{160, 153, 1, 19};
 
@@ -184,7 +184,6 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
 
     @Override
     public void showLoading() {
-        //显示正在加载视图
         mTvGuAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mTvGuRecycleView.getParent());
     }
 
@@ -201,7 +200,6 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
 
     @Override
     public void onDataSucess() {
-
         //停止下拉刷新动画
         mSwipeRefreshLayout.setRefreshing(false);
     }

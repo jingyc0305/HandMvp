@@ -24,7 +24,7 @@ public class CommonInterceptor implements Interceptor{
                 .newBuilder()
                 .scheme(oldRequest.url().scheme())
                 .host(oldRequest.url().host())
-                .addQueryParameter(Consnts.COMMON_PARAM, mCommonParam);
+                .addQueryParameter(httpCommon.COMMON_PARAM, mCommonParam);
 
 
         // 新的请求
