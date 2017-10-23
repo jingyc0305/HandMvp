@@ -8,10 +8,14 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
+import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.adapter.VodMainAdapter;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.VodMainContract;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter.VodMainPresenter;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
 
 /**
  * Created by JIngYuchun on 2017/10/11.
@@ -38,6 +42,13 @@ public class VodFragmentMain extends BaseFragment<VodMainContract.IVodMainPresen
 
     @Override
     protected void initView() {
+        //获取首页分类缓存数据
+        ArrayList<CategoryBean> categoryBeanList =(ArrayList<CategoryBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY);
+        if(null != categoryBeanList && categoryBeanList.size() > 0){
+            for (int i = 0; i < categoryBeanList.size(); i++) {
+                tabTitle[i] = categoryBeanList.get(i).getName();
+            }
+        }
         fragments.add(new TVSeriesFragment());
         fragments.add(new VarietyFragment());
         fragments.add(new MovieFragment());

@@ -1,10 +1,12 @@
 package jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by JIngYuchun on 2017/10/12.
  */
 
-public class CategoryBean {
+public class CategoryBean implements Serializable{
 
     /**
      * categoryId : 9

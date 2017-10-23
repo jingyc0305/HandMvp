@@ -39,7 +39,7 @@ public class VodByTagMTAdapter extends BaseMultiItemQuickAdapter<VodByTagMTBean.
                 helper.setText(R.id.video_name,item.getVideoName());
                 helper.setText(R.id.vod_text,String.valueOf(item.getVideoInfo().get(0).getValue()));
                 ImageView iv = helper.getView(R.id.vod_imageview);
-                Glide.with(mContext).load(item.getVideoImageY()).centerCrop().dontAnimate().placeholder(R.mipmap.avatar).into(iv);
+                Glide.with(mContext).load(item.getVideoImageY()).centerCrop().dontAnimate().placeholder(R.mipmap.ic_not_network).into(iv);
                 break;
         }
     }

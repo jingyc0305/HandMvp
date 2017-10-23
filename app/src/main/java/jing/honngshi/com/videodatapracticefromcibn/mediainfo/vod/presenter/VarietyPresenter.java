@@ -1,17 +1,30 @@
 package jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
+import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
+import jing.honngshi.com.videodatapracticefromcibn.cache.Repository;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagMTBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.VarietyContract;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
+
+import static jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory
+        .getVodService;
 
 
 /**
@@ -20,19 +33,39 @@ import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactor
 
 public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
     VarietyContract.IVarietyVodView mIVarietyVodView;
-    private int tv_categoryId = 0;
     private final String VARIETY_TYPE_LOVE = "love";
     private final String VARIETY_TYPE_PERSON = "person";
     public VarietyPresenter (VarietyContract.IVarietyVodView mIVarietyVodView){
         this.mIVarietyVodView = mIVarietyVodView;
     }
 
-
+    private int categoryVarietyId = 0;
+    private int categotyVarietyFirstId = 0;
+    ArrayList<CategoryBean> categoryBeanList;
+    ArrayList<CategoryTagBean> categoryByTagBeanList;
     @Override
     public void getVarietyTypeData() {
-        //获取电视剧下的栏目菜单
-        RetrofitFactory.getVodService().getTvSeriesCategoryTag(10, "Android", "2.0","MzljMjU0N2UwYjk3",
-                "6.0.1", "com.sumavision.sanping.gudou")
+        //获取首页分类缓存数据
+        categoryBeanList = (ArrayList<CategoryBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY);
+        categoryByTagBeanList =  (ArrayList<CategoryTagBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY_TAG_Variety);
+        if(null != categoryBeanList && categoryBeanList.size() > 0){
+            categoryVarietyId = categoryBeanList.get(1).getCategoryId();
+            if(null != categoryByTagBeanList && categoryByTagBeanList.size() > 0){
+                categotyVarietyFirstId = categoryByTagBeanList.get(0).getTagId();
+            }else{
+                // TODO: 2017/10/23 这里默认写死 后面改成网络获取的值 通过fragment 进行参数传递
+                categotyVarietyFirstId = 19;
+            }
+        }else{
+            // TODO: 2017/10/23 这里默认写死 后面改成网络获取的值 通过fragment 进行参数传递
+            categoryVarietyId = 10;
+            categotyVarietyFirstId = 19;
+        }
+        //获取综艺下的栏目菜单
+        Observable<List<CategoryTagBean>> mCategoryByTagBean = getVodService().getCategoryTag(categoryVarietyId, "Android", "2.0","MzljMjU0N2UwYjk3",
+                "6.0.1", "com.sumavision.sanping.gudou");
+        //加入缓存
+        Repository.getICache().getCategoryTag(mCategoryByTagBean,new DynamicKey("getCategoryTag_Variety"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -43,15 +76,17 @@ public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
                     }
 
                     @Override
-                    public void onNext(@NonNull List<CategoryTagBean> tvSeriesBean) {
+                    public void onNext(@NonNull List<CategoryTagBean> categoryTagBeen) {
                         //这里后面缓存到Perfenerce中
-                        tv_categoryId = tvSeriesBean.get(0).getTagId();
-                        mIVarietyVodView.onShowCategoryName(tvSeriesBean);
+                        categotyVarietyFirstId = categoryTagBeen.get(0).getTagId();
+                        //将栏目分类下的子栏目分类数据保存下来 以便无网络时候可以取到缓存
+                        PreferenceUtils.save(JingApp.getInstance(),AppCommon.CATEGORY_TAG_Variety,categoryTagBeen);
+                        mIVarietyVodView.onShowCategoryName(categoryTagBeen);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        //mITVSeriesVodView.showNetError();
+                        mIVarietyVodView.showNetError();
                         e.printStackTrace();
                     }
 
@@ -65,8 +100,12 @@ public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
     public void getVarietyDetailData() {
         mIVarietyVodView.showLoading();
         //获取分类下的数据 综艺-真人秀
-        RetrofitFactory.getVodService().getVodByTagDatas("Android", "2.0","MzljMjU0N2UwYjk3",
-                "6.0.1", "com.sumavision.sanping.gudou","1","10",10,tv_categoryId)
+        Logger.d("当前栏目ID: "+ categoryVarietyId);
+        Logger.d("综艺下的栏目ID: "+ categotyVarietyFirstId);
+        Observable<VodByTagMTBean> mVodByTagMtBean = RetrofitFactory.getVodService().getVodByTagMTDatas("Android", "2.0","MzljMjU0N2UwYjk3",
+                "6.0.1", "com.sumavision.sanping.gudou","1","10",categoryVarietyId,categotyVarietyFirstId);
+        //加入缓存
+        Repository.getICache().getVodByTagMTDatas(mVodByTagMtBean,new DynamicKey("getVodByTag_Variety"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<VodByTagMTBean>() {
@@ -121,6 +160,7 @@ public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        mIVarietyVodView.showNetError();
                     }
 
                     @Override

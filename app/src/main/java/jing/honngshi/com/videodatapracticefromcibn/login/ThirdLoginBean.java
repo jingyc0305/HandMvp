@@ -1,10 +1,12 @@
 package jing.honngshi.com.videodatapracticefromcibn.login;
 
+import java.io.Serializable;
+
 /**
  * Created by JIngYuchun on 2017/10/20.
  */
 
-public class ThirdLoginBean {
+public class ThirdLoginBean implements Serializable{
     private String accessToken;//4AF609C8060FD93175AB2C45A1AE34EF
     private String gender;//男
     private String openid;//E9A11B4DBCF121624EF79D8C58EED23D

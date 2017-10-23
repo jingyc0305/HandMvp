@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:stv="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
     android:orientation="vertical">
@@ -85,13 +86,18 @@
             android:inputType="textPersonName"/>
     </LinearLayout>
 
-    <Button
+    <com.allen.library.SuperButton
         android:id="@+id/login_submit_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        stv:sCornersRadius="5dp"
+        android:textColor="@color/white"
         android:layout_marginTop="12dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
+        stv:sSelectorNormalColor="@color/gray_btn_normal"
+        stv:sSelectorPressedColor="@color/gray_btn"
+        stv:sUseSelector="true"
         android:text="登录"/>
 
     <RelativeLayout
@@ -102,20 +108,20 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-----------------其他方式登录-----------------"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/login_statusbar_color"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:text="-----------------其他方式登录-----------------"
+            android:textColor="@color/login_statusbar_color"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="48dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginBottom="48dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -149,8 +155,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="新用户注册"/>
+            android:text="新用户注册"
+            android:textColor="@color/gray_btn"/>
 
     </RelativeLayout>
 

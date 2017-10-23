@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -26,8 +27,10 @@ import java.util.Random;
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.login.LoginActivity;
+import jing.honngshi.com.videodatapracticefromcibn.login.ThirdLoginBean;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.AppUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.FileUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PermissionUtil;
@@ -89,6 +92,7 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
         supertextview.setDynamicStyle(SuperTextView.DynamicStyle.CHANGE_COLOR);
         //设置动画的动态文本
         supertextview.setDynamicText("相信技术的力量");
+        supertextview.setSelectedColor(Color.BLUE);
         //开始动画
         supertextview.start();
     }
@@ -170,14 +174,9 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                String accessToken_App = PreferenceUtils.getPrefString(SplashActivity.this, AppCommon.ACESSTOKEN_APP,null);
-                String accessToken_QQ = PreferenceUtils.getPrefString(SplashActivity.this, AppCommon.ACESSTOKEN_QQ,null);
-                String accessToken_Wechat = PreferenceUtils.getPrefString(SplashActivity.this, AppCommon.ACESSTOKEN_WeChat,null);
-                String accessToken_Sina = PreferenceUtils.getPrefString(SplashActivity.this, AppCommon.ACESSTOKEN_Sina,null);
-                if((null != accessToken_App && !"".equals(accessToken_App))
-                        ||(null != accessToken_QQ && !"".equals(accessToken_QQ))
-                        ||(null != accessToken_Wechat && !"".equals(accessToken_Wechat))
-                        ||(null != accessToken_Sina && !"".equals(accessToken_Sina))){
+                ThirdLoginBean userLoginInfo = (ThirdLoginBean) PreferenceUtils.get(JingApp.getInstance(), AppCommon.USERINFO);
+
+                if(userLoginInfo!=null && !"".equals(userLoginInfo.getName())&&!"".equals(userLoginInfo.getProfile_image_url())){
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else{

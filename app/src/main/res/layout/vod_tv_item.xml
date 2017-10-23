@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
             android:layout_margin="8dp"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"/>
+            android:textColor="@color/score_text_color"
+            android:textSize="14sp"/>
 
         <View
             android:layout_width="wrap_content"

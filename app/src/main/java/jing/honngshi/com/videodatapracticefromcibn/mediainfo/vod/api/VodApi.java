@@ -44,7 +44,7 @@ public interface VodApi {
      * @return
      */
     @GET("api/v3/getCategoryTag/{categoryId}")
-   Observable<List<CategoryTagBean>> getTvSeriesCategoryTag(@Path("categoryId") int categoryId,
+   Observable<List<CategoryTagBean>> getCategoryTag(@Path("categoryId") int categoryId,
                                                             @Query("appOs") String appOs,
                                                             @Query("appVer") String appVer,
                                                             @Query("appKey") String appKey,
@@ -66,7 +66,7 @@ public interface VodApi {
      * @return
      */
     @GET("/api/v3/getVodByTag")
-    Observable<VodByTagBean> getTvGuDatas(@Query("appOs") String appOs,
+    Observable<VodByTagBean> getVodByTagDatas(@Query("appOs") String appOs,
                                           @Query("appVer") String appVer,
                                           @Query("appKey") String appKey,
                                           @Query("osVer") String osVer,
@@ -89,7 +89,7 @@ public interface VodApi {
      * @return
      */
     @GET("/api/v3/getVodByTag")
-    Observable<VodByTagMTBean> getVodByTagDatas(@Query("appOs") String appOs,
+    Observable<VodByTagMTBean> getVodByTagMTDatas(@Query("appOs") String appOs,
                                             @Query("appVer") String appVer,
                                             @Query("appKey") String appKey,
                                             @Query("osVer") String osVer,

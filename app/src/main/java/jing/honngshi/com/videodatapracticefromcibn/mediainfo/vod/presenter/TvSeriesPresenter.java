@@ -3,16 +3,27 @@ package jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.presenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
+import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.AbsBasePresenter;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.cache.Repository;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.contract.TvSeriesContract;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory;
+import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
+
+import static jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory
+        .getVodService;
 
 /**
  * Created by JIngYuchun on 2017/10/12.
@@ -21,15 +32,38 @@ import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactor
 public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeriesVodView> implements TvSeriesContract.ITVSeriesVodPresenter {
 
     TvSeriesContract.ITVSeriesVodView mITVSeriesVodView;
-    private int tv_categoryId = 0;
+    private int categoryTvId = 0;
+    private int categotyTVFirstId = 0;
+    ArrayList<CategoryBean> categoryBeanList;
+    ArrayList<CategoryTagBean> categoryByTagBeanList;
     public TvSeriesPresenter(TvSeriesContract.ITVSeriesVodView mITVSeriesVodView){
         this.mITVSeriesVodView = mITVSeriesVodView;
+
     }
     @Override
     public void getTvSeriseTypeData() {
+        //获取首页分类缓存数据
+        categoryBeanList = (ArrayList<CategoryBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY);
+        categoryByTagBeanList =  (ArrayList<CategoryTagBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY_TAG_TV);
+        if(null != categoryBeanList && categoryBeanList.size() > 0){
+            categoryTvId = categoryBeanList.get(0).getCategoryId();
+            if(null != categoryByTagBeanList && categoryByTagBeanList.size() > 0){
+                categotyTVFirstId = categoryByTagBeanList.get(0).getTagId();
+            }else{
+                // TODO: 2017/10/23 这里默认写死 后面改成网络获取的值 通过fragment 进行参数传递
+                categotyTVFirstId = 160;
+            }
+        }else{
+            // TODO: 2017/10/23 这里默认写死 后面改成网络获取的值 通过fragment 进行参数传递
+            categoryTvId = 9;
+            categotyTVFirstId = 160;
+        }
         //获取电视剧下的栏目菜单
-        RetrofitFactory.getVodService().getTvSeriesCategoryTag(9, "Android", "2.0","MzljMjU0N2UwYjk3",
-                "6.0.1", "com.sumavision.sanping.gudou")
+        Observable<List<CategoryTagBean>> categoryTags = RetrofitFactory.getVodService().getCategoryTag(categoryTvId, "Android", "2.0","MzljMjU0N2UwYjk3",
+                "6.0.1", "com.sumavision.sanping.gudou");
+        //加入rxcache缓存
+        Repository.getICache()
+                .getCategoryTag(categoryTags,new DynamicKey("getCategoryTag_TV"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -40,15 +74,17 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
                     }
 
                     @Override
-                    public void onNext(@NonNull List<CategoryTagBean> tvSeriesBean) {
+                    public void onNext(@NonNull List<CategoryTagBean> categoryTagBeen) {
                         //这里后面缓存到Perfenerce中
-                        tv_categoryId = tvSeriesBean.get(0).getTagId();
-                        mITVSeriesVodView.onShowCategoryName(tvSeriesBean);
+                        categotyTVFirstId = categoryTagBeen.get(0).getTagId();
+                        //将栏目分类下的子栏目分类数据保存下来 以便无网络时候可以取到缓存
+                        PreferenceUtils.save(JingApp.getInstance(),AppCommon.CATEGORY_TAG_TV,categoryTagBeen);
+                        mITVSeriesVodView.onShowCategoryName(categoryTagBeen);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        //mITVSeriesVodView.showNetError();
+                        mITVSeriesVodView.showNetError();
                         e.printStackTrace();
                     }
 
@@ -62,8 +98,10 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
     public void getTVSeriesDetailData() {
         mITVSeriesVodView.showLoading();
         //获取分类下的数据 古装正剧
-        RetrofitFactory.getVodService().getTvGuDatas("Android", "2.0","MzljMjU0N2UwYjk3",
-                "6.0.1", "com.sumavision.sanping.gudou","1","10",9,tv_categoryId)
+        Observable<VodByTagBean> mVodByTagBean = getVodService().getVodByTagDatas("Android", "2.0","MzljMjU0N2UwYjk3",
+                "6.0.1", "com.sumavision.sanping.gudou","1","10",categoryTvId,categotyTVFirstId);
+        //加入数据缓存
+        Repository.getICache().getVodByTagDatas(mVodByTagBean,new DynamicKey("getVodByTag_TV"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<VodByTagBean>() {
@@ -114,6 +152,7 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        mITVSeriesVodView.showNetError();
                     }
 
                     @Override

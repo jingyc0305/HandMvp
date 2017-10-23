@@ -77,8 +77,9 @@ public class VarietyFragment extends BaseFragment<VarietyContract.IVarietyVodPre
         adTitles.add("斯里兰卡铁路罢工 乘客挂火车人满为患");
         //初始化banner view
         mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_variety_banner_layout, null);
+        mAdView.setVisibility(View.GONE);
         mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
-                null);
+                null,false);
 
     }
 
@@ -96,11 +97,12 @@ public class VarietyFragment extends BaseFragment<VarietyContract.IVarietyVodPre
         mBanner.setDelayTime(3000);
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         mBanner.setImageLoader(new GlideImageLoader());
-        mBanner.start();
+
         //初始化adapter
         mVodByTagMTAdapter = new VodByTagMTAdapter(mRowsBeanXes);
         mVodByTagMTAdapter.addHeaderView(mAdView);
-        mVodByTagMTAdapter.addFooterView(mAdBottomView);
+        // TODO: 2017/10/23 这里要解决 为什么会出现异常崩溃 先暂时注释掉 
+        //mVodByTagMTAdapter.addFooterView(mAdBottomView);
         mVodByTagMTAdapter.openLoadAnimation();
         mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 6));
         //设置dapater多类型数据
@@ -136,13 +138,13 @@ public class VarietyFragment extends BaseFragment<VarietyContract.IVarietyVodPre
         });
         //设置刷新球颜色
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.YELLOW);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.parseColor("#BBFFFF"));
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
+//        mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -183,6 +185,10 @@ public class VarietyFragment extends BaseFragment<VarietyContract.IVarietyVodPre
     public void showData(ArrayList<VodByTagMTBean.RowsBeanX> mTvGuDataList) {
         //初始化列表数据对象
         mRowsBeanXes = mTvGuDataList;
+        //避免出现加载数据时候广告banner和脚部视图先显示出来一下,再去加载数据loading;而不是先loading再一起显示
+        mAdView.setVisibility(View.VISIBLE);
+        //开始轮播
+        mBanner.start();
         //装载数据
         mVodByTagMTAdapter.setNewData(mTvGuDataList);
         //刷新列表显示数据

@@ -6,19 +6,20 @@ android {
     defaultConfig {
         applicationId "jing.honngshi.com.videodatapracticefromcibn"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
-            buildConfigField('boolean','APP_DEBUG',"false")
+            buildConfigField('boolean', 'APP_DEBUG', "false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField('boolean','APP_DEBUG',"true")
+            buildConfigField('boolean', 'APP_DEBUG', "true")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -36,8 +37,6 @@ dependencies {
     compile "com.android.support:cardview-v7:${rootProject.ext.support}"
     compile "com.android.support:support-v4:${rootProject.ext.support}"
     compile "com.android.support:design:${rootProject.ext.support}"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
     // butterknife
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
     compile "com.jakewharton:butterknife:${butterknifeVersion}"
@@ -54,30 +53,18 @@ dependencies {
     //compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     //compile "com.trello:rxlifecycle2:rxlifecycle-android:${rxlifecycleVersion}"
     //compile "com.trello:rxlifecycle2-components:${rxlifecycleVersion}"
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
     // dagger
     annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
     compile "com.google.dagger:dagger:${daggerVersion}"
     // logger
-    compile 'com.orhanobut:logger:1.15'
     // loadingview
-    compile 'com.github.ybq:Android-SpinKit:1.1.0'
     // circleimageview
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.miguelcatalan:materialsearchview:1.4.0'
-    compile 'me.yokeyword:fragmentation:0.10.4'
-    compile 'com.youth.banner:banner:1.4.10'
-    //最新版本
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     //permission
-    compile 'com.github.hotchemi:permissionsdispatcher:3.0.1'
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.0.1'
 
     //stutas bar
-    compile 'com.kelin.translucentbar:library:0.8.0'
-    //supertextview
-    compile 'com.king.view:supertextview:1.0.1'
+    //supertextview 文字动画
+    //SuperTextView 布局 按钮 shape
+    //cache
     //umshare
     compile files('libs/SocialSDK_QQ_Simplify.jar')
     compile files('libs/SocialSDK_Sina_Simplify.jar')
@@ -88,4 +75,22 @@ dependencies {
     compile files('libs/umeng_social_shareboard.jar')
     compile files('libs/umeng_social_shareview.jar')
     compile files('libs/umeng_social_tool.jar')
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
+    compile 'me.yokeyword:fragmentation:0.10.4'
+    compile 'com.youth.banner:banner:1.4.10'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile 'com.github.hotchemi:permissionsdispatcher:3.0.1'
+    compile 'com.kelin.translucentbar:library:0.8.0'
+    compile 'com.king.view:supertextview:1.0.1'
+    compile 'com.github.lygttpod:SuperTextView:2.1.5'
+    compile 'com.github.VictorAlbertos.RxCache:runtime:1.8.1-2.x'
+    compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.0.1'
 }

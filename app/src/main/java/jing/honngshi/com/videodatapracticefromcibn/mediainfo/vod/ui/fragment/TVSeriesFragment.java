@@ -147,12 +147,12 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
         //设置刷新球颜色
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.YELLOW);
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
+//        mSwipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSwipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -207,7 +207,10 @@ public class TVSeriesFragment extends BaseFragment<TvSeriesContract.ITVSeriesVod
     @Override
     public void onShowCategoryName(List<CategoryTagBean> tvTypesBeen) {
         //显示电视剧下的类别名称
-        if(tvTypesBeen.size() == 0 || tvTypesBeen == null){
+        if(tvTypesBeen.size() == 0
+                || tvTypesBeen == null
+                || "".equals(tvTypesBeen.get(0).getName())
+                || null == tvTypesBeen.get(0).getName()){
             //来自本地
             tv_type1.setText(tv_types[0]);
             tv_type2.setText(tv_types[1]);

@@ -9,4 +9,7 @@
     <color name="bg">#F0F0F0</color>
     <color name="login_statusbar_color">#969696</color>
     <color name="txt_color">#48495F</color>
+    <color name="score_text_color">#FF830F</color>
+    <color name="gray_btn">#9e9e9e</color>#
+    <color name="gray_btn_normal">#96C7E5</color>
 </resources>

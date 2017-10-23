@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.allen.library.SuperButton;
 import com.kelin.translucentbar.library.TranslucentBarManager;
 import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
@@ -19,6 +19,7 @@ import java.util.Map;
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.home.MainActivity;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
@@ -32,7 +33,7 @@ import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.StatusBarUtil
 public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginContract.ILoginPresenter> implements LoginContract.ILoginView,View.OnClickListener{
 
     @BindView(R.id.login_submit_btn)
-    Button mLoginBtn;
+    SuperButton mLoginBtn;
     @BindView(R.id.login_qq_imageView)
     ImageView qq_login;
     @BindView(R.id.login_wechat_imageView)
@@ -80,9 +81,10 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
     @Override
     public void loginSucess(String loginType,ThirdLoginBean mThirdLoginBean) {
         Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_LONG).show();
-        PreferenceUtils.setPrefString(this,loginType,mThirdLoginBean.getAccessToken());
+        //缓存在配置文件中
+        PreferenceUtils.save(JingApp.getInstance().getApplicationContext(),AppCommon.USERINFO,mThirdLoginBean);
         //进入主页
-        gotoMainActivity(mThirdLoginBean.getProfile_image_url(),mThirdLoginBean.getName());
+        gotoMainActivity(mThirdLoginBean);
     }
 
     @Override
@@ -120,13 +122,12 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
 
     /**
      * 登录成功进入主页
-     * @param avtaverImgUrl
-     * @param nickname
+     * @param mThirdLoginBean
      */
-    private void gotoMainActivity(String avtaverImgUrl,String nickname){
+    private void gotoMainActivity(ThirdLoginBean mThirdLoginBean){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("avatar_url",avtaverImgUrl);
-        intent.putExtra("user_nickname",nickname);
+        intent.putExtra("avatar_url",mThirdLoginBean.getProfile_image_url());
+        intent.putExtra("user_nickname",mThirdLoginBean.getName());
         startActivity(intent);
 
         finish();

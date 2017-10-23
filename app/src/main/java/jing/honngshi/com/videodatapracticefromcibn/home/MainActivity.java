@@ -42,8 +42,10 @@ import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.login.LoginActivity;
+import jing.honngshi.com.videodatapracticefromcibn.login.ThirdLoginBean;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.live.ui.fragment.LiveFragmentMain;
 import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.ui.fragment.VodFragmentMain;
+import jing.honngshi.com.videodatapracticefromcibn.setting.SettingsActivity;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.httpCommon;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PermissionUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
@@ -111,27 +113,33 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         hideFragment = showFragment;
 
         mShareAction = new ShareAction(MainActivity.this)
-                .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN)
+                .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.MORE)
+                .addButton("umeng_sharebutton_copy", "umeng_sharebutton_copy", "umeng_socialize_copy", "umeng_socialize_copy")
+                .addButton("umeng_sharebutton_copyurl", "umeng_sharebutton_copyurl", "umeng_socialize_copyurl", "umeng_socialize_copyurl")
                 .setShareboardclickCallback(new ShareBoardlistener() {
                     @Override
                     public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
 
-                        if(share_media == SHARE_MEDIA.QQ){
-                            //Toast.makeText(MainActivity.this,"点击了QQ分享",Toast.LENGTH_SHORT).show();
+                        if(snsPlatform.mShowWord.equals("umeng_sharebutton_copy")){
+                            Toast.makeText(MainActivity.this, "复制文本", Toast.LENGTH_LONG).show();
+                        }else if (snsPlatform.mShowWord.equals("umeng_sharebutton_copyurl")) {
+                            Toast.makeText(MainActivity.this, "复制链接", Toast.LENGTH_LONG).show();
+                        }else{
+                            shareWebSit.setTitle(httpCommon.title);
+                            shareWebSit.setThumb(new UMImage(MainActivity.this, httpCommon.imageurl));
+                            shareWebSit.setDescription(httpCommon.text);
+
+                            mUMVideo.setTitle("战狼Ⅱ");//视频的标题
+                            mUMVideo.setThumb(new UMImage(MainActivity.this, httpCommon.imageurl));//视频的缩略图
+                            mUMVideo.setDescription("吴京执导的动作军事电影，由吴京、弗兰克·格里罗、吴刚、张翰、卢靖姗、淳于珊珊、丁海峰等主演");//视频的描述
+
+                            mShareAction
+                                    .withMedia(mUMVideo)
+                                    .setPlatform(share_media)
+                                    .setCallback(umShareListener)
+                                    .share();
                         }
-                        shareWebSit.setTitle(httpCommon.title);
-                        shareWebSit.setThumb(new UMImage(MainActivity.this, httpCommon.imageurl));
-                        shareWebSit.setDescription(httpCommon.text);
 
-                        mUMVideo.setTitle("战狼Ⅱ");//视频的标题
-                        mUMVideo.setThumb(new UMImage(MainActivity.this, httpCommon.imageurl));//视频的缩略图
-                        mUMVideo.setDescription("吴京执导的动作军事电影，由吴京、弗兰克·格里罗、吴刚、张翰、卢靖姗、淳于珊珊、丁海峰等主演");//视频的描述
-
-                        mShareAction
-                                .withMedia(mUMVideo)
-                                .setPlatform(share_media)
-                                .setCallback(umShareListener)
-                                .share();
                     }
                 });
 
@@ -194,7 +202,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     case R.id.drawer_wechat:
                         showFragment = AppCommon.TYPE_LIVE;
                         break;
-
+                    case R.id.drawer_setting:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        break;
+                    case R.id.drawer_about:
+                        break;
                 }
 
                 menuItem.setChecked(true);
@@ -213,14 +225,36 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void initData() {
         //获取第三方登录返回用户资料数据
+        //首先获取配置文件中缓存的用户信息
+        ThirdLoginBean loginBean = (ThirdLoginBean) PreferenceUtils.get(JingApp.getInstance().getApplicationContext(),AppCommon.USERINFO);
         avatar_url = getIntent().getStringExtra("avatar_url");//获取头像 来自第三方登录
         user_nickname = getIntent().getStringExtra("user_nickname");//获取昵称信息
-        //设置用户头像和昵称
-        if(mMainPresenter!=null){
-            mMainPresenter.UpdateUserInfo();
+
+        if("".equals(avatar_url)|| "".equals(user_nickname)
+                ||null == avatar_url || null == userNickName){
+            if(loginBean!=null){
+                avatar_url = loginBean.getProfile_image_url();
+                user_nickname = loginBean.getName();
+                //设置用户头像和昵称
+                if(mMainPresenter!=null){
+                    mMainPresenter.UpdateUserInfo();
+                }else{
+                    showUserInfo();
+                }
+            }else{
+                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                finish();
+            }
+
         }else{
-            showUserInfo();
+            //设置用户头像和昵称
+            if(mMainPresenter!=null){
+                mMainPresenter.UpdateUserInfo();
+            }else{
+                showUserInfo();
+            }
         }
+
     }
 
 

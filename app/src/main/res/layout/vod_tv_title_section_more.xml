@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical">
@@ -11,15 +12,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@mipmap/section_title_img"/>
+
         <TextView
             android:id="@+id/section_title_content_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="古装正剧"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
             android:textStyle="bold"/>
 
@@ -28,9 +39,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/more"
+            android:gravity="center"
             android:text="更多"
             android:textColor="@android:color/darker_gray"
-            android:gravity="center_vertical"
-            android:textSize="16sp"/>
+            android:textSize="12sp"/>
     </LinearLayout>
 </LinearLayout>
