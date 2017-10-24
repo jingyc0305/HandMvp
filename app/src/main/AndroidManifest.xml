@@ -36,6 +36,15 @@
             android:name=".login.LoginActivity"
             android:theme="@style/AppTheme.TranslucentStatusBar">
         </activity>
+        <activity
+            android:name=".setting.SettingsActivity"
+            android:theme="@style/AppTheme.TranslucentStatusBar"
+            android:label="@string/title_activity_settings">
+        </activity>
+        <activity
+            android:name=".about.AboutActivity"
+            android:theme="@style/AppTheme.TranslucentStatusBar">
+        </activity>
         <!-- qq精简版 -->
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
@@ -61,10 +70,7 @@
             android:value="59e6d164734be45c2e0000bc">
         </meta-data>
 
-        <activity
-            android:name=".setting.SettingsActivity"
-            android:label="@string/title_activity_settings">
-        </activity>
+
     </application>
 
 </manifest>

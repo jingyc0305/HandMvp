@@ -8,14 +8,14 @@ import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
-import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 /**
  * Created by JIngYuchun on 2017/10/11.
  */
 
 public abstract class BaseActivity<V extends BaseView, P extends BasePresenter> extends
-        SupportActivity implements BaseView {
+        SwipeBackActivity implements BaseView {
 
     private P mPresenter;
     private Unbinder mUnBinder;

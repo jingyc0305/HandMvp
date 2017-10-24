@@ -21,5 +21,10 @@ public class AppCommon {
     public static final String CATEGORY = "category";
     public static final String CATEGORY_TAG_TV = "category_tag_tv";
     public static final String CATEGORY_TAG_Variety = "category_tag_variety";
-
+    //================= Fragment Main ==============
+    public static final int FIRST = 0;//点播
+    public static final int SECOND = 1;//直播
+    public static final int THIRD = 2;//新闻
+    public static final int FOURTH = 3;//美图
+    public static final int FIVE = 4;//我的
 }

@@ -19,10 +19,34 @@
 
     <string name="umeng_sharebutton_copy">复制文本</string>
     <string name="umeng_sharebutton_copyurl">复制连接</string>
-    <string name="title_activity_settings">Settings</string>
-
+    <string name="title_activity_settings">设置</string>
+    <string name="open">用到的开源库</string>
+    <string name="about_app">渣渣汇,我的第一个开源的MVP练手项目,持续更新中...</string>
+    <string name="contact_me">联系我</string>
+    <string name="string_share_text">这是一个Retrofit+RxJava+Mvp架构的App,仅用于个人练手https://github.com/jingyc0305/MyFirstGitHubApp[分享自渣渣汇]</string>
+    <string name="blog">Email:\n\n 554783696@qq.com\n\nGitHub:
+        \n\n https://github.com/jingyc0305</string>
     <!-- Strings related to Settings -->
-
+    <string name="open_source">
+         io.reactivex.rxjava2:rxjava:2.1.0
+        \n\ncom.squareup.retrofit2:retrofit:2.2.0
+        \n\ncom.squareup.okhttp3:okhttp:3.7.0
+        \n\ncom.jakewharton:butterknife:8.8.1
+        \n\ncom.google.dagger:dagger:2.6
+        \n\ncom.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar
+        \n\ncom.orhanobut:logger:1.15
+        \n\nde.hdodenhof:circleimageview:2.1.0
+        \n\ncom.miguelcatalan:materialsearchview:1.4.0
+        \n\nme.yokeyword:fragmentation:0.10.4
+        \n\ncom.youth.banner:banner:1.4.10
+        \n\ncom.github.bumptech.glide:glide:3.7.0
+        \n\ncom.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30
+        \n\ncom.github.hotchemi:permissionsdispatcher:3.0.1
+        \n\ncom.kelin.translucentbar:library:0.8.0
+        \n\ncom.king.view:supertextview:1.0.1
+        \n\ncom.github.lygttpod:SuperTextView:2.1.5
+        \n\ncom.github.VictorAlbertos.RxCache:runtime:1.8.1-2.x
+        \n\ncom.github.VictorAlbertos.Jolyglot:gson:0.0.3</string>
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 

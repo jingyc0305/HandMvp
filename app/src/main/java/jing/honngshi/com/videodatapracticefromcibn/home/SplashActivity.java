@@ -63,6 +63,7 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
         //沉浸式状态栏
         TranslucentBarManager translucentBarManager = new TranslucentBarManager(this);
         translucentBarManager.transparent(SplashActivity.this, R.color.login_statusbar_color);
+        setSwipeBackEnable(false); // 是否允许滑动
     }
 
     @Override

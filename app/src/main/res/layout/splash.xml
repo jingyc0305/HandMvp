@@ -7,19 +7,19 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="188dp"
+        android:layout_height="188dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        app:srcCompat="@mipmap/logo"/>
+        android:layout_marginTop="120dp"
+        app:srcCompat="@mipmap/startapp_img"/>
 
     <com.king.view.supertextview.SuperTextView
         android:id="@+id/home_page_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="240dp"
+        android:layout_marginTop="320dp"
         android:gravity="center"
         android:text="相信技术的力量"
         android:textColor="@android:color/black"

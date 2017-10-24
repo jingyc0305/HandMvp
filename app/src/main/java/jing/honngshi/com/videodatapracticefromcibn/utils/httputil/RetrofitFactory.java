@@ -3,7 +3,7 @@ package jing.honngshi.com.videodatapracticefromcibn.utils.httputil;
 import java.util.concurrent.TimeUnit;
 
 import jing.honngshi.com.videodatapracticefromcibn.home.SplashService;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.api.VodApi;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.api.VodApi;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

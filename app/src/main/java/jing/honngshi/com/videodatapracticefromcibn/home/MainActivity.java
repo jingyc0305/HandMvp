@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,14 +38,29 @@ import com.umeng.socialize.utils.ShareBoardlistener;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
+import jing.honngshi.com.videodatapracticefromcibn.about.AboutActivity;
 import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
 import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
+import jing.honngshi.com.videodatapracticefromcibn.base.impl.BaseMainFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.BottomBar;
+import jing.honngshi.com.videodatapracticefromcibn.category.BottomBarTab;
+import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
+import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveFragmentMain;
+import jing.honngshi.com.videodatapracticefromcibn.category.mine.ui.fragment.MineFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.mine.ui.fragment.MineFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.news.ui.fragment.NewsFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.news.ui.fragment.NewsFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.picture.ui.fragment
+        .PictureFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.picture.ui.fragment.PictureFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment.TVSeriesFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment.VodFragmentMain;
 import jing.honngshi.com.videodatapracticefromcibn.login.LoginActivity;
 import jing.honngshi.com.videodatapracticefromcibn.login.ThirdLoginBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.live.ui.fragment.LiveFragmentMain;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.ui.fragment.VodFragmentMain;
 import jing.honngshi.com.videodatapracticefromcibn.setting.SettingsActivity;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.httpCommon;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PermissionUtil;
@@ -58,7 +74,7 @@ import permissions.dispatcher.RuntimePermissions;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 @RuntimePermissions
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,MainContract.IMainView {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,MainContract.IMainView,BaseMainFragment.OnBackToFirstListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -71,6 +87,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     VodFragmentMain mVodFragment;
     LiveFragmentMain mLiveFragment;
+    NewsFragment mNewsFragment;
+    PictureFragment mPictureFragment;
+    MineFragment mMineFragment;
     ActionBarDrawerToggle mDrawerToggle;
 
     private int hideFragment = AppCommon.TYPE_LIVE;
@@ -81,9 +100,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     UMusic mUMusic;
     UMVideo mUMVideo;
     String avatar_url,user_nickname;
-
     MainPresenter mMainPresenter;
     private boolean isHasPremission = false;
+    @BindView(R.id.bottomBar)
+    BottomBar mBottomBar;
+    private SupportFragment[] mFragments = new SupportFragment[5];
     @Override
     protected void onStart() {
         super.onStart();
@@ -102,16 +123,53 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SupportFragment firstFragment = findFragment(VodFragmentMain.class);
+
         //沉浸式状态栏
         TranslucentBarManager translucentBarManager = new TranslucentBarManager(this);
         translucentBarManager.translucent(this);
 
+        setSwipeBackEnable(false); // 是否允许滑动
+
         hideFragment = AppCommon.TYPE_LIVE;
-        showHideFragment(getTargetFragment(showFragment), getTargetFragment(hideFragment));
+
+        //showHideFragment(getTargetFragment(showFragment), getTargetFragment(hideFragment));
+
         mNavigationView.getMenu().findItem(R.id.drawer_zhihu).setChecked(true);
+
         mToolbar.setTitle(mNavigationView.getMenu().findItem(getCurrentItem(showFragment)).getTitle().toString());
+
         hideFragment = showFragment;
 
+        if(firstFragment == null){
+            mFragments[AppCommon.FIRST] = VodFragmentMain.newInstance();
+            mFragments[AppCommon.SECOND] = LiveFragmentMain.newInstance();
+            mFragments[AppCommon.THIRD] = NewsFragment.newInstance();
+            mFragments[AppCommon.FOURTH] = PictureFragment.newInstance();
+            mFragments[AppCommon.FIVE] = MineFragment.newInstance();
+            loadMultipleRootFragment(
+                    R.id.fl_main_content,//fragment容器
+                    AppCommon.FIRST,
+                    mFragments[AppCommon.FIRST],//点播
+                    mFragments[AppCommon.SECOND],//直播
+                    mFragments[AppCommon.THIRD],//新闻
+                    mFragments[AppCommon.FOURTH],//美图
+                    mFragments[AppCommon.FIVE]);//我的
+        }else{
+            mFragments[AppCommon.FIRST] = firstFragment;
+            mFragments[AppCommon.SECOND] = findFragment(LiveFragmentMain.class);
+            mFragments[AppCommon.THIRD] = findFragment(NewsFragment.class);
+            mFragments[AppCommon.FOURTH] = findFragment(PictureFragment.class);
+            mFragments[AppCommon.FIVE] = findFragment(MineFragment.class);
+        }
+        //初始化友盟分享配置
+        initShareAction();
+    }
+
+    /**
+     * 初始化友盟分享配置
+     */
+    private void initShareAction() {
         mShareAction = new ShareAction(MainActivity.this)
                 .setDisplayList(SHARE_MEDIA.SINA,SHARE_MEDIA.QQ,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.MORE)
                 .addButton("umeng_sharebutton_copy", "umeng_sharebutton_copy", "umeng_socialize_copy", "umeng_socialize_copy")
@@ -142,8 +200,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                     }
                 });
-
     }
+
     /**
      * 屏幕横竖屏切换时避免出现window leak的问题
      */
@@ -166,12 +224,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void initView() {
 
         initToolBar(mToolbar,true,"点播");
-        mVodFragment = new VodFragmentMain();
-        mLiveFragment = new LiveFragmentMain();
         View nav_header_view = mNavigationView.inflateHeaderView(R.layout.nav_header_layout);
         //View nav_header_view = mNavigationView.getHeaderView(0);
         //mNavigationView.addHeaderView(nav_header_view);
-        userAvatar = nav_header_view.findViewById(R.id.user_avatar);
+        userAvatar = (ImageView)nav_header_view.findViewById(R.id.user_avatar);
         userAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,7 +235,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
-        userNickName = nav_header_view.findViewById(R.id.user_nickname);
+        userNickName = (TextView)nav_header_view.findViewById(R.id.user_nickname);
         mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar, R.string.drawer_open,R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
@@ -191,7 +247,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         config.setShareboardPostion(ShareBoardConfig.SHAREBOARD_POSITION_BOTTOM); // 底部弹出
         config.setMenuItemBackgroundShape(ShareBoardConfig.BG_SHAPE_CIRCULAR); // 圆角背景
 
-        loadMultipleRootFragment(R.id.fl_main_content,0,mVodFragment,mLiveFragment);
+
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -206,6 +262,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         break;
                     case R.id.drawer_about:
+                        startActivity(new Intent(MainActivity.this, AboutActivity.class));
                         break;
                 }
 
@@ -215,6 +272,54 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showHideFragment(getTargetFragment(showFragment), getTargetFragment(hideFragment));
                 hideFragment = showFragment;
                 return true;
+            }
+        });
+
+        mBottomBar.addItem(new BottomBarTab(this, R.mipmap.ic_home_white_24dp))
+                .addItem(new BottomBarTab(this, R.mipmap.ic_discover_white_24dp))
+                .addItem(new BottomBarTab(this, R.mipmap.ic_message_white_24dp))
+                .addItem(new BottomBarTab(this, R.mipmap.ic_account_circle_white_24dp))
+                .addItem(new BottomBarTab(this, R.mipmap.ic_account_circle_white_24dp));
+
+        mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(int position, int prePosition) {
+                showHideFragment(mFragments[position], mFragments[prePosition]);
+            }
+
+            @Override
+            public void onTabUnselected(int position) {
+
+            }
+
+            @Override
+            public void onTabReselected(int position) {
+                final SupportFragment currentFragment = mFragments[position];
+                int count = currentFragment.getChildFragmentManager().getBackStackEntryCount();
+
+                // 如果不在该类别Fragment的主页,则回到主页;
+                if (count > 1) {
+                    if (currentFragment instanceof VodFragmentMain) {
+                        currentFragment.popToChild(TVSeriesFragment.class, false);
+                    } else if (currentFragment instanceof LiveFragmentMain) {
+                        currentFragment.popToChild(LiveFirstFragment.class, false);
+                    } else if (currentFragment instanceof NewsFragment) {
+                        currentFragment.popToChild(NewsFirstFragment.class, false);
+                    } else if (currentFragment instanceof PictureFragment) {
+                        currentFragment.popToChild(PictureFirstFragment.class, false);
+                    } else if (currentFragment instanceof MineFragment) {
+                        currentFragment.popToChild(MineFirstFragment.class, false);
+                    }
+                    return;
+                }
+
+
+                // 这里推荐使用EventBus来实现 -> 解耦
+                if (count == 1) {
+                    // 在FirstPagerFragment中接收, 因为是嵌套的孙子Fragment 所以用EventBus比较方便
+                    // 主要为了交互: 重选tab 如果列表不在顶部则移动到顶部,如果已经在顶部,则刷新
+                    EventBusActivityScope.getDefault(MainActivity.this).post(new TabSelectedEvent(position));
+                }
             }
         });
     }
@@ -413,6 +518,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private long mLastClickTime = 0;
 
     @Override
+    public void onBackPressedSupport() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            pop();
+        } else {
+            ActivityCompat.finishAfterTransition(this);
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -430,5 +544,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else {
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    @Override
+    public void onBackToFirstFragment() {
+        mBottomBar.setCurrentItem(AppCommon.FIRST);
     }
 }

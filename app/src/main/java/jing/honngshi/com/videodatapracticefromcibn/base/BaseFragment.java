@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -42,6 +43,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
             Bundle savedInstanceState) {
         if (mRootView == null) {
             mRootView = inflater.inflate(initLayout(), null);
+            EventBusActivityScope.getDefault(_mActivity).register(this);
             ButterKnife.bind(this, mRootView);
             // initInjector();
             initView();

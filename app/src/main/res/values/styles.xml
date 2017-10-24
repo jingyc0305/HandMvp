@@ -17,13 +17,9 @@
     <style name="AppTheme.Splash">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@mipmap/splash</item>
+        <item name="android:windowBackground">@mipmap/start_img</item>
     </style>
-    <style name="AppTheme.MaterialAboutActivity" parent="AppTheme">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+
     <style name="bg">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

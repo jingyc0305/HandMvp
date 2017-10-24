@@ -7,10 +7,10 @@ import io.reactivex.Observable;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 import io.rx_cache2.LifeCache;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.CategoryTagBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagBean;
-import jing.honngshi.com.videodatapracticefromcibn.mediainfo.vod.bean.VodByTagMTBean;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryBean;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagBean;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagMTBean;
 
 /**
  * Created by JIngYuchun on 2017/10/23.

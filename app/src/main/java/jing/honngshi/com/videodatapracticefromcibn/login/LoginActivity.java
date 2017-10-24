@@ -52,8 +52,7 @@ public class LoginActivity extends BaseActivity<LoginContract.ILoginView,LoginCo
         translucentBarManager.transparent(LoginActivity.this, R.color.login_statusbar_color);
         //设置登录页面顶部状态栏文字为黑色 因为背景为白色
         StatusBarUtil.setStatusBarLightMode(this,android.R.color.background_dark);
-
-
+        setSwipeBackEnable(false); // 是否允许滑动
     }
     @Override
     public LoginContract.ILoginPresenter createPresneter() {

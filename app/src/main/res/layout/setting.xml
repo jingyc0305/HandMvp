@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:stv="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <include
+        layout="@layout/toolbar_view_layout"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <com.allen.library.SuperTextView
+                stv:sDividerLineType="both"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                stv:sLeftIconRes="@mipmap/head_default"
+                stv:sLeftTextString="昵称"
+                stv:sRightIconRes="@mipmap/more" />
+
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sLeftTextString="通知设置"
+                stv:sRightIconRes="@mipmap/more" />
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                stv:sLeftTextString="账号与安全"
+                stv:sRightTextString="已保护"
+                stv:sRightIconRes="@mipmap/more"
+                android:layout_height="50dp" />
+
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sDividerLineType="bottom"
+                stv:sLeftTextString="主题切换"
+                stv:sRightIconRes="@mipmap/more" />
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sLeftTextString="夜间模式"
+                stv:sRightViewType="switchBtn"
+                stv:sSwitchIsChecked="false"
+                stv:sSwitchMinWidth="50dp"
+                stv:sThumbResource="@drawable/thumb"
+                stv:sTrackResource="@drawable/track"/>
+            <com.allen.library.SuperTextView
+                android:id="@+id/cache_tv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sDividerLineType="both"
+                stv:sLeftTextString="清理缓存"
+                stv:sRightTextString="2.48KB"
+                stv:sRightIconRes="@mipmap/more" />
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                stv:sDividerLineType="both"
+                stv:sLeftTextString="推荐好友"
+                stv:sRightIconRes="@mipmap/more" />
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sDividerLineType="both"
+                stv:sLeftTextString="意见反馈"
+                stv:sRightIconRes="@mipmap/more" />
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sDividerLineType="both"
+                stv:sLeftTextString="检查更新"
+                stv:sRightTextString="当前版本 v1.0"
+                stv:sRightIconRes="@mipmap/more" />
+
+            <com.allen.library.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                stv:sDividerLineType="both"
+                stv:sLeftTextString="关于"
+                stv:sRightIconRes="@mipmap/more" />
+            <com.allen.library.SuperButton
+                android:id="@+id/login_submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                stv:sCornersRadius="5dp"
+                android:textColor="@color/white"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                stv:sSelectorNormalColor="@android:color/holo_red_light"
+                stv:sSelectorPressedColor="@android:color/holo_red_dark"
+                stv:sUseSelector="true"
+                android:layout_marginBottom="12dp"
+                android:text="登录"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
