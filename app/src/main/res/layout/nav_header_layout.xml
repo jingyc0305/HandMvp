@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="@dimen/nav_header_height"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:background="@color/colorPrimary"
+             android:background="@mipmap/homepage_header"
              android:gravity="center"
              android:orientation="vertical">
 
@@ -20,7 +20,7 @@
             android:layout_width="@dimen/avatar_width"
             android:layout_height="@dimen/avatar_height"
             app:civ_border_width="1dp"
-            android:src="@mipmap/avatar"
+            android:src="@mipmap/head_default"
             app:civ_border_color="@android:color/white"/>
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="大美妞"
+            android:text="点击登录"
             android:textColor="@android:color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     </LinearLayout>

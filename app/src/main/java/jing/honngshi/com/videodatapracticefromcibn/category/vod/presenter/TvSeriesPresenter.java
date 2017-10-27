@@ -1,5 +1,7 @@
 package jing.honngshi.com.videodatapracticefromcibn.category.vod.presenter;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
     }
     @Override
     public void getTvSeriseTypeData() {
+        Logger.d("========getTvSeriseTypeData=========");
         //获取首页分类缓存数据
         categoryBeanList = (ArrayList<CategoryBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY);
         categoryByTagBeanList =  (ArrayList<CategoryTagBean>) PreferenceUtils.get(JingApp.getInstance(), AppCommon.CATEGORY_TAG_TV);
@@ -75,6 +78,7 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
 
                     @Override
                     public void onNext(@NonNull List<CategoryTagBean> categoryTagBeen) {
+                        Logger.d("========onShowCategoryName=========");
                         //这里后面缓存到Perfenerce中
                         categotyTVFirstId = categoryTagBeen.get(0).getTagId();
                         //将栏目分类下的子栏目分类数据保存下来 以便无网络时候可以取到缓存
@@ -96,6 +100,7 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
 
     @Override
     public void getTVSeriesDetailData() {
+        Logger.d("=========getTVSeriesDetailData===========");
         mITVSeriesVodView.showLoading();
         //获取分类下的数据 古装正剧
         Observable<VodByTagBean> mVodByTagBean = getVodService().getVodByTagDatas("Android", "2.0","MzljMjU0N2UwYjk3",
@@ -146,6 +151,7 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
                             mTvGuDataList.add(item.getRows().get(i));
                             mTvGuDataList.add(item.getRows().get(i));
                         }
+                        Logger.d("========onDataSucess showData=========");
                         mITVSeriesVodView.onDataSucess();
                         mITVSeriesVodView.showData(mTvGuDataList);
                     }

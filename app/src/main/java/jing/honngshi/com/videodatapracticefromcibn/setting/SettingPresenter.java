@@ -1,5 +1,6 @@
 package jing.honngshi.com.videodatapracticefromcibn.setting;
 
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.AbsBasePresenter;
 
 /**
@@ -22,6 +23,8 @@ public class SettingPresenter extends AbsBasePresenter<SettingContract.ISettingV
     @Override
     public void LoginOut() {
         mISettingView.showLoading();
+        JingApp.getInstance().exitApp();
+        mISettingView.LoginOutOK();
     }
 
     @Override

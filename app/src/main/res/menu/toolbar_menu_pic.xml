@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_action_search"
+        android:orderInCategory="100"
+        android:title="@string/abc_search_hint"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/drawer_like"
+        android:icon="@mipmap/ic_drawer_like"
+        app:showAsAction="never"
+        android:title="@string/drawer_collection"/>
+    <item
+        android:id="@+id/drawer_setting"
+        android:icon="@mipmap/ic_drawer_setting"
+        app:showAsAction="never"
+        android:title="@string/drawer_setting"/>
+    <item
+        android:id="@+id/drawer_about"
+        android:icon="@mipmap/ic_drawer_about"
+        app:showAsAction="never"
+        android:title="@string/drawer_about"/>
+</menu>
+

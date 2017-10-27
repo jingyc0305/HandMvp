@@ -6,7 +6,10 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
+import io.rx_cache2.EvictProvider;
 import io.rx_cache2.LifeCache;
+import io.rx_cache2.Reply;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.GetAllListData;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryBean;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagBean;
@@ -57,5 +60,11 @@ public interface ICacheProviders {
      */
     @LifeCache(duration = 5, timeUnit = TimeUnit.MINUTES)
     Observable<VodByTagMTBean> getVodByTagMTDatas(Observable<VodByTagMTBean> categorys, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
-
+    /**
+     * 缓存直播数据
+     * @param evictProvider
+     * @return
+     */
+    @LifeCache(duration = 2, timeUnit = TimeUnit.MINUTES)
+    Observable<Reply<GetAllListData>> getLiveIndexList(Observable<GetAllListData> data, EvictProvider evictProvider);
 }

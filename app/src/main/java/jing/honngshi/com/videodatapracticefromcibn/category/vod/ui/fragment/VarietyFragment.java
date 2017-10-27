@@ -1,6 +1,7 @@
 package jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +21,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.adapter.VodByTagMTAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
@@ -54,7 +55,14 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     private View errorView;
 
     private VarietyContract.IVarietyVodPresenter mIVarietyVodPresenter;
+    public static VarietyFragment newInstance() {
 
+        Bundle args = new Bundle();
+
+        VarietyFragment fragment = new VarietyFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     protected int initLayout() {
         return R.layout.variety_fragment_layout;
@@ -80,19 +88,8 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         adTitles.add("西班牙国庆日 35万民众举行反独游行");
         adTitles.add("斯里兰卡铁路罢工 乘客挂火车人满为患");
         //初始化banner view
-        mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_variety_banner_layout, null);
-        mAdView.setVisibility(View.GONE);
-        mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
-                null,false);
-
-    }
-
-    /**
-     * adapter 相关设置
-     */
-    @Override
-    protected void initVodByTagAdapter() {
-        //初始化banner 对象
+        mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_variety_banner_layout, (ViewGroup)mVarietyRecycleView.getParent(),false);
+        //mAdView.setVisibility(View.GONE);
         mBanner = (Banner) mAdView.findViewById(R.id.banner);
         mBanner.setImages(adUrlList);
         mBanner.setBannerTitles(adTitles);
@@ -101,14 +98,25 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         mBanner.setDelayTime(3000);
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         mBanner.setImageLoader(new GlideImageLoader());
+        mBanner.start();
+        mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
+                (ViewGroup) mVarietyRecycleView.getParent(),false);
+
+        mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 6));
+    }
+
+    /**
+     * adapter 相关设置
+     */
+    @Override
+    protected void initVodByTagAdapter() {
+
 
         //初始化adapter
-        mVodByTagMTAdapter = new VodByTagMTAdapter(mRowsBeanXes);
-        mVodByTagMTAdapter.addHeaderView(mAdView);
-        // TODO: 2017/10/23 这里要解决 为什么会出现异常崩溃 先暂时注释掉 
-        //mVodByTagMTAdapter.addFooterView(mAdBottomView);
+        mVodByTagMTAdapter = new VodByTagMTAdapter(mRowsBeanXes,adUrlList,adTitles);
+
         mVodByTagMTAdapter.openLoadAnimation();
-        mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 6));
+
         //设置dapater多类型数据
         mVodByTagMTAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
             @Override
@@ -124,7 +132,9 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
             }
         });
         mVarietyRecycleView.setAdapter(mVodByTagMTAdapter);
-
+        // TODO: 2017/10/23 这里要解决 为什么会出现异常崩溃
+        mVodByTagMTAdapter.addHeaderView(mAdView);
+        mVodByTagMTAdapter.addFooterView(mAdBottomView);
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
                 mVarietyRecycleView.getParent(), false);
         errorView.setOnClickListener(new View.OnClickListener() {
@@ -187,12 +197,14 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
 
     @Override
     public void showData(ArrayList<VodByTagMTBean.RowsBeanX> mTvGuDataList) {
+        //停止下拉刷新动画
+        mSwipeRefreshLayout.setRefreshing(false);
         //初始化列表数据对象
-        mRowsBeanXes = mTvGuDataList;
+        //mRowsBeanXes = mTvGuDataList;
         //避免出现加载数据时候广告banner和脚部视图先显示出来一下,再去加载数据loading;而不是先loading再一起显示
         mAdView.setVisibility(View.VISIBLE);
         //开始轮播
-        mBanner.start();
+        //mBanner.start();
         //装载数据
         mVodByTagMTAdapter.setNewData(mTvGuDataList);
         //刷新列表显示数据
@@ -225,6 +237,10 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     }
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-        if (event.position != AppCommon.FIRST) return;
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBusActivityScope.getDefault(_mActivity).unregister(this);
     }
 }

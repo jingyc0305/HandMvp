@@ -21,7 +21,7 @@ public class MyGridLayoutManger extends GridLayoutManager {
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
         try {
             super.onLayoutChildren(recycler, state);
-        }catch (IndexOutOfBoundsException  e){
+        }catch (IllegalStateException  e){
             e.printStackTrace();
         }
     }
@@ -30,5 +30,8 @@ public class MyGridLayoutManger extends GridLayoutManager {
     public boolean canScrollVertically() {
         return isScrollEnabled && super.canScrollVertically();
     }
-
+    @Override
+    public boolean supportsPredictiveItemAnimations() {
+        return false;
+    }
 }

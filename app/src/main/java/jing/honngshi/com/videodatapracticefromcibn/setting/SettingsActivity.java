@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
+import com.allen.library.SuperButton;
 import com.allen.library.SuperTextView;
 import com.kelin.translucentbar.library.TranslucentBarManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import jing.honngshi.com.videodatapracticefromcibn.R;
+import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.CacheUtil;
@@ -22,6 +25,8 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
     Toolbar mToolbar;
     @BindView(R.id.cache_tv)
     SuperTextView mSuperTextView;
+    @BindView(R.id.login_submit_btn)
+    SuperButton mSuperButton;
     SettingPresenter mSettingPresenter;
     @Override
     public BasePresenter createPresneter() {
@@ -45,6 +50,7 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
 
     @Override
     public void initView() {
+
         initToolBar(mToolbar,true,"设置");
         try{
             //设置缓存大小
@@ -52,6 +58,10 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
         }catch (Exception e){
             e.printStackTrace();
         }
+        // TODO: 2017/10/25 这里对于重新登录的状态为未做处理 主要是重新登录后登出按钮再次显示 有时间弄吧
+//        if(isLogined){
+//            //mSuperButton.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Override
@@ -72,6 +82,9 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
     @Override
     public void LoginOutOK() {
 
+        mSuperButton.setVisibility(View.GONE);
+        JingApp.isLogined = false;
+        Toast.makeText(SettingsActivity.this,"退出成功",Toast.LENGTH_SHORT).show();
     }
 
     @Override

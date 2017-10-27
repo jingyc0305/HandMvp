@@ -31,7 +31,6 @@ import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.login.LoginActivity;
 import jing.honngshi.com.videodatapracticefromcibn.login.ThirdLoginBean;
-import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.AppUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.FileUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PermissionUtil;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.PreferenceUtils;
@@ -166,7 +165,7 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
 
     private void animWelcomeImage() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(splashImg, "translationX", -100F);
-        animator.setDuration(2000L).start();
+        animator.setDuration(10L).start();
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -175,18 +174,7 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                ThirdLoginBean userLoginInfo = (ThirdLoginBean) PreferenceUtils.get(JingApp.getInstance(), AppCommon.USERINFO);
-
-                if(userLoginInfo!=null && !"".equals(userLoginInfo.getName())&&!"".equals(userLoginInfo.getProfile_image_url())){
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }else{
-                    //后面加入有效期判断
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
-
-                finish();
+                //jumpToHomePage();
             }
 
             @Override
@@ -201,6 +189,23 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
         });
     }
 
+    /**
+     * 进入主页
+     */
+    private void jumpToHomePage(){
+        ThirdLoginBean userLoginInfo = (ThirdLoginBean) PreferenceUtils.get(JingApp.getInstance(), AppCommon.USERINFO);
+
+        if(userLoginInfo!=null && !"".equals(userLoginInfo.getName())&&!"".equals(userLoginInfo.getProfile_image_url())){
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+        }else{
+            //后面加入有效期判断
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+        finish();
+    }
     SuperTextView.OnDynamicListener mOnDynamicListener = new SuperTextView.OnDynamicListener(){
 
         @Override
@@ -211,9 +216,10 @@ public class SplashActivity extends BaseActivity<SplashContract.ISplashView,Spla
         @Override
         public void onCompile() {
             //获取权限成功
-            delaySplash();
-            String deviceId = AppUtil.getDeviceId(SplashActivity.this);
-            mSplashPresenter.getSplash(deviceId);
+            //delaySplash();
+            //String deviceId = AppUtil.getDeviceId(SplashActivity.this);
+            //mSplashPresenter.getSplash(deviceId);
+            jumpToHomePage();
         }
     };
 }

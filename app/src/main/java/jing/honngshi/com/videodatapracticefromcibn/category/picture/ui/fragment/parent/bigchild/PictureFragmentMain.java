@@ -1,26 +1,24 @@
-package jing.honngshi.com.videodatapracticefromcibn.category.picture.ui.fragment;
+package jing.honngshi.com.videodatapracticefromcibn.category.picture.ui.fragment.parent.bigchild;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import org.greenrobot.eventbus.Subscribe;
 
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
-import jing.honngshi.com.videodatapracticefromcibn.base.impl.BaseMainFragment;
+import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 
 /**
  * Created by JIngYuchun on 2017/10/24.
  */
 
-public class PictureFragment extends BaseMainFragment {
+public class PictureFragmentMain extends BaseFragment {
 
-    public static PictureFragment newInstance() {
+    public static PictureFragmentMain newInstance() {
 
         Bundle args = new Bundle();
 
-        PictureFragment fragment = new PictureFragment();
+        PictureFragmentMain fragment = new PictureFragmentMain();
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,15 +56,8 @@ public class PictureFragment extends BaseMainFragment {
     protected void initVodByTagAdapter() {
 
     }
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-        if (findChildFragment(PictureFragment.class) == null) {
-            loadRootFragment(R.id.picture_fragment_container, PictureFirstFragment.newInstance());
-        }
-    }
+
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-        if (event.position != AppCommon.FOURTH) return;
     }
 }

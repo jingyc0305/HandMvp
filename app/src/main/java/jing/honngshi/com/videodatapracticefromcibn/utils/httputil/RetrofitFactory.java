@@ -2,6 +2,7 @@ package jing.honngshi.com.videodatapracticefromcibn.utils.httputil;
 
 import java.util.concurrent.TimeUnit;
 
+import jing.honngshi.com.videodatapracticefromcibn.category.live.api.LiveService;
 import jing.honngshi.com.videodatapracticefromcibn.home.SplashService;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.api.VodApi;
 import okhttp3.OkHttpClient;
@@ -33,6 +34,13 @@ public class RetrofitFactory {
             .client(httpClient)
             .build()
             .create(VodApi.class);
+    private static LiveService liveService = new Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(httpClient)
+            .build()
+            .create(LiveService.class);
     private static SplashService splashService = new Retrofit.Builder()
             .baseUrl(splashBaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -50,6 +58,9 @@ public class RetrofitFactory {
     }
     public static VodApi getVodService() {
         return vodService;
+    }
+    public static LiveService getLiveService() {
+        return liveService;
     }
     public static SplashService getSplashService() {
         return splashService;

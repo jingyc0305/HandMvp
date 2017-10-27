@@ -3,13 +3,13 @@ package jing.honngshi.com.videodatapracticefromcibn.base.impl;
 import android.content.Context;
 
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
-import jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment.VodFragmentMain;
+import jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment.parent.VodRootFragment;
 
 /**
  * 懒加载
  * Created by YoKeyword on 16/6/5.
  */
-public abstract class BaseMainFragment extends BaseFragment{
+public abstract class BaseRootFragment extends BaseFragment{
     protected OnBackToFirstListener _mBackToFirstListener;
 
     @Override
@@ -39,7 +39,7 @@ public abstract class BaseMainFragment extends BaseFragment{
         if (getChildFragmentManager().getBackStackEntryCount() > 1) {
             popChild();
         } else {
-            if (this instanceof VodFragmentMain) {   // 如果是 第一个Fragment 则退出app
+            if (this instanceof VodRootFragment) {   // 如果是 第一个Fragment 则退出app
                 _mActivity.finish();
             } else {                                    // 如果不是,则回到第一个Fragment
                 _mBackToFirstListener.onBackToFirstFragment();

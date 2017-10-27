@@ -3,6 +3,7 @@ package jing.honngshi.com.videodatapracticefromcibn.app;
 import android.app.Activity;
 import android.app.Application;
 
+import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -25,10 +26,11 @@ public class JingApp extends Application {
     public static synchronized JingApp getInstance() {
         return instance;
     }
-
+    public static boolean isLogined;
     @Override
     public void onCreate() {
         super.onCreate();
+        isLogined = false;
         instance = this;
         //初始化logger
         LogUtil.init(BuildConfig.APP_DEBUG);
@@ -38,6 +40,7 @@ public class JingApp extends Application {
         PlatformConfig.setSinaWeibo("85580524", "3ea78b582a57e200592415f61f073cc3","http://open.weibo.com/apps/85580524/privilege/oauth");
         //初始化友盟
         UMShareAPI.get(this);
+        Config.DEBUG = true;
         //初始化fragmention
         Fragmentation.builder()
                 // 设置 栈视图 模式为 悬浮球模式   SHAKE: 摇一摇唤出  默认NONE：隐藏， 仅在Debug环境生效

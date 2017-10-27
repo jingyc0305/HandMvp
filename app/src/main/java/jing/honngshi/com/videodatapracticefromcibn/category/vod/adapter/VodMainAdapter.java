@@ -11,10 +11,11 @@ import java.util.ArrayList;
 
 public class VodMainAdapter extends FragmentPagerAdapter {
     private final ArrayList<Fragment> fragments;
-
-    public VodMainAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
+    String[] tabTitle;
+    public VodMainAdapter(FragmentManager fm, ArrayList<Fragment> fragments,String[] tabTitle) {
         super(fm);
         this.fragments = fragments;
+        this.tabTitle = tabTitle;
     }
 
     /**
@@ -39,6 +40,6 @@ public class VodMainAdapter extends FragmentPagerAdapter {
      */
     @Override
     public CharSequence getPageTitle(int position) {
-        return null;
+        return tabTitle[position];
     }
 }

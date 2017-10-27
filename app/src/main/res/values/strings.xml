@@ -2,11 +2,12 @@
     <string name="app_name">渣渣汇</string>
 
     //main drawer
-    <string name="zhihu">CIBN点播</string>
-    <string name="wechat">直播</string>
-    <string name="gank">新闻</string>
-    <string name="gold">美图</string>
-    <string name="vtex">视频</string>
+    <string name="type_vod">点播</string>
+    <string name="type_live">直播</string>
+    <string name="type_news">新闻</string>
+    <string name="type_picture">美图</string>
+    <string name="type_video">视频</string>
+    <string name="type_mine">我的</string>
     <string name="drawer_about">关于</string>
     <string name="drawer_collection">收藏</string>
     <string name="drawer_setting">设置</string>
@@ -103,6 +104,51 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="query_suggestions">
+        <item>Android</item>
+        <item>Android Search</item>
+        <item>Android Golde</item>
+        <item>Android JianShu</item>
+        <item>iOS</item>
+        <item>SCALA</item>
+        <item>Ruby</item>
+        <item>JavaScript</item>
+        <item>C#</item>
+        <item>Python</item>
+        <item>C</item>
+        <item>C++</item>
+        <item>PHP</item>
+        <item>Go</item>
+        <item>Perl</item>
+        <item>Bash</item>
+        <item>Lua</item>
+        <item>R</item>
+        <item>TCL</item>
+        <item>Haskell</item>
+        <item>Objective C</item>
+        <item>Swift</item>
+        <item>Kotlin</item>
+        <item>jQuery</item>
+        <item>Development</item>
+        <item>Web</item>
+        <item>Ajax</item>
+        <item>Test</item>
+        <item>Testing</item>
+        <item>CookBook</item>
+        <item>Beagle</item>
+        <item>VMware</item>
+        <item>Less.js</item>
+        <item>IDE</item>
+        <item>Arduino</item>
+        <item>Xamarin</item>
+        <item>UI</item>
+        <item>Microsoft</item>
+        <item>Application</item>
+        <item>Development</item>
+        <item>JUnit</item>
+        <item>SQL</item>
+        <item>Beagle</item>
+    </string-array>
     <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>

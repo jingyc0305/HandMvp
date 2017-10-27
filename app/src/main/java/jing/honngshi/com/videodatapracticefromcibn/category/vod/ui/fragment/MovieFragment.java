@@ -1,10 +1,12 @@
 package jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment;
 
+import android.os.Bundle;
+
 import org.greenrobot.eventbus.Subscribe;
 
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 
 /**
@@ -13,7 +15,14 @@ import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 
 public class MovieFragment extends BaseFragment {
 
+    public static MovieFragment newInstance() {
 
+        Bundle args = new Bundle();
+
+        MovieFragment fragment = new MovieFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     protected int initLayout() {
         return R.layout.movie_fragment_layout;
@@ -49,6 +58,10 @@ public class MovieFragment extends BaseFragment {
     }
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-        if (event.position != AppCommon.FIRST) return;
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBusActivityScope.getDefault(_mActivity).unregister(this);
     }
 }

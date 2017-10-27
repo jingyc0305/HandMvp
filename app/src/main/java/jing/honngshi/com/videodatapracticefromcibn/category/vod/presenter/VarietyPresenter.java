@@ -35,6 +35,7 @@ public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
     VarietyContract.IVarietyVodView mIVarietyVodView;
     private final String VARIETY_TYPE_LOVE = "love";
     private final String VARIETY_TYPE_PERSON = "person";
+    private final String VARIETY_TYPE_BANNER = "banner";
     public VarietyPresenter (VarietyContract.IVarietyVodView mIVarietyVodView){
         this.mIVarietyVodView = mIVarietyVodView;
     }
@@ -121,6 +122,11 @@ public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
                             item.setRows(vodByTagMTBean.getRows());
                             item.getRows().get(i).setVideoName(vodByTagMTBean.getRows().get(i).getVideoName());
                             item.getRows().get(i).setVideoImage(vodByTagMTBean.getRows().get(i).getVideoImageOttY());
+                            //轮播banner
+//                            VodByTagMTBean.RowsBeanX mbanner = new VodByTagMTBean.RowsBeanX(false,false,VARIETY_TYPE_BANNER,VodByTagMTBean
+//                                    .RowsBeanX.IMG_BANNER,1);
+//                            mbanner.setBanner(true);
+//                            mTvGuDataList.add(mbanner);
                             //菜单1-爱情
                             mTvGuDataList.add(new VodByTagMTBean.RowsBeanX(true,false,VARIETY_TYPE_LOVE,VodByTagMTBean
                                     .RowsBeanX.IMG_TEXT_UP_DOWN, 2));

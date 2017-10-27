@@ -1,66 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none">
+        tools:openDrawer="start">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/fl_main_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            android:orientation="vertical">
+            android:layout_height="match_parent"/>
 
-            <FrameLayout
-                android:id="@+id/toolbar_container"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottombar_height"
+            android:gravity="bottom">
+
+            <jing.honngshi.com.videodatapracticefromcibn.category.BottomBar
+                android:id="@+id/bottomBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/bottombar_height"/>
 
-                <include layout="@layout/toolbar_view_layout"/>
-
-                <com.miguelcatalan.materialsearchview.MaterialSearchView
-                    android:id="@+id/view_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </FrameLayout>
-
-
-            <FrameLayout
-                android:id="@+id/fl_main_content"
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/bottomBar"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/actionbar_shadow_up"/>
+        </RelativeLayout>
 
         <android.support.design.widget.NavigationView
             android:id="@+id/navigation"
-            android:layout_width="280dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:menu="@menu/nav_drawer_menu">
         </android.support.design.widget.NavigationView>
     </android.support.v4.widget.DrawerLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:background="@drawable/actionbar_shadow_up"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/bottombar_height"
-        android:layout_height="wrap_content"/>
 
-    <jing.honngshi.com.videodatapracticefromcibn.category.BottomBar
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/bottombar_height"
-        android:layout_gravity="bottom"/>
-
-
-</FrameLayout>
+</RelativeLayout>

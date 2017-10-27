@@ -3,31 +3,31 @@
     <item android:title="@string/drawer_group_content">
         <menu>
             <item
-                android:id="@+id/drawer_zhihu"
-                android:icon="@mipmap/ic_drawer_zhihu"
+                android:id="@+id/drawer_vod"
+                android:icon="@mipmap/type_vod_select"
                 android:checkable="true"
                 android:checked="true"
-                android:title="@string/zhihu"/>
+                android:title="@string/type_vod"/>
             <item
-                android:id="@+id/drawer_wechat"
-                android:icon="@mipmap/ic_drawer_wechat"
+                android:id="@+id/drawer_live"
+                android:icon="@mipmap/type_live_select"
                 android:checkable="true"
-                android:title="@string/wechat"/>
+                android:title="@string/type_live"/>
             <item
-                android:id="@+id/drawer_gank"
-                android:icon="@mipmap/ic_drawer_gank"
+                android:id="@+id/drawer_news"
+                android:icon="@mipmap/type_news_select"
                 android:checkable="true"
-                android:title="@string/gank"/>
+                android:title="@string/type_news"/>
             <item
-                android:id="@+id/drawer_gold"
-                android:icon="@mipmap/ic_drawer_gold"
+                android:id="@+id/drawer_picture"
+                android:icon="@mipmap/type_pic_select"
                 android:checkable="true"
-                android:title="@string/gold"/>
+                android:title="@string/type_picture"/>
             <item
-                android:id="@+id/drawer_vtex"
-                android:icon="@mipmap/ic_drawer_vtex"
+                android:id="@+id/drawer_video"
+                android:icon="@mipmap/smile_video"
                 android:checkable="true"
-                android:title="@string/vtex"/>
+                android:title="@string/type_video"/>
         </menu>
     </item>
     <item android:title="@string/drawer_group_options">

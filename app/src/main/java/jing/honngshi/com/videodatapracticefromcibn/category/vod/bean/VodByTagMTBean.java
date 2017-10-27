@@ -155,6 +155,7 @@ public class VodByTagMTBean {
         public static final int VOD_IMG_TEXT_UP_DOWN = 4;
         public static final int IMG_TEXT_LEFT_RIGHT = 5;
         public static final int HEADER_NAME_MORE = 6;
+        public static final int IMG_BANNER = 7;
 
         public static final int TEXT_SPAN_SIZE = 3;
         public static final int IMG_SPAN_SIZE = 1;
@@ -167,7 +168,7 @@ public class VodByTagMTBean {
         private String headerName;
         private boolean isMenuItem;
         private boolean isHeader;
-
+        private boolean isBanner;
         private int videoId;
         private String videoName;
         private int videoType;
@@ -224,6 +225,10 @@ public class VodByTagMTBean {
                     setMenuIcon(R.mipmap.person);
                 }
             }
+        }
+
+        public void setBanner(boolean banner) {
+            isBanner = banner;
         }
 
         public void setMenuItem(boolean menuItem) {

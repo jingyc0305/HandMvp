@@ -2,25 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-              android:layout_height="match_parent"
+                android:layout_height="match_parent"
                 android:background="@color/bg">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="188dp"
-        android:layout_height="188dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="120dp"
-        app:srcCompat="@mipmap/startapp_img"/>
+    <FrameLayout
+        android:id="@+id/splash_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@mipmap/splash_bg"/>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="288dp"
+            android:layout_height="288dp"
+            android:layout_gravity="center"
+            app:srcCompat="@mipmap/startapp_img"/>
+
+    </FrameLayout>
 
     <com.king.view.supertextview.SuperTextView
         android:id="@+id/home_page_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="320dp"
-        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="48dp"
+        android:gravity="center_horizontal"
         android:text="相信技术的力量"
         android:textColor="@android:color/black"
         android:textSize="28dp"/>
@@ -29,11 +40,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
+
         <jing.honngshi.com.videodatapracticefromcibn.widget.FixedImageView
             android:id="@+id/splash_img"
-            android:scaleType="centerCrop"
             android:layout_width="480dp"
-            android:layout_height="640dp"/>
+            android:layout_height="640dp"
+            android:scaleType="centerCrop"/>
     </ScrollView>
 
 </RelativeLayout>

@@ -20,8 +20,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.adapter.VodByTagAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
@@ -91,9 +91,9 @@ public class TVSeriesFragment extends BaseFragment
         adTitles.add("西班牙国庆日 35万民众举行反独游行");
         adTitles.add("斯里兰卡铁路罢工 乘客挂火车人满为患");
 
-        mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_banner_layout, null);
+        mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_banner_layout, (ViewGroup)mTvGuRecycleView.getParent(),false);
         mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
-                null);
+                (ViewGroup) mTvGuRecycleView.getParent() ,false);
         tv_type1 = (TextView) mAdView.findViewById(R.id.tv_type1);
         tv_type2= (TextView) mAdView.findViewById(R.id.tv_type2);
         tv_type3 = (TextView) mAdView.findViewById(R.id.tv_type3);
@@ -107,40 +107,18 @@ public class TVSeriesFragment extends BaseFragment
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.start();
-
-        initTvGuAdapter();
-    }
-
-    private void initTvSeriesAdapter() {
-        //        mSwipeRefreshLayout.setEnabled(false);
-        //解决swipelayout与Recyclerview的冲突
-        //        mTvTypeRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-        //            @Override
-        //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        //
-        //                int topRowVerticalPosition =
-        //                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0
-        // : recyclerView.getChildAt(0).getTop();
-        //                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
-        //            }
-        //
-        //            @Override
-        //            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        //                super.onScrollStateChanged(recyclerView, newState);
-        //            }
-        //        });
+        mTvGuRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 3));
 
     }
-
     private void initTvGuAdapter() {
-        mTvGuAdapter = new VodByTagAdapter(R.layout.vod_tv_item, R.layout.vod_tv_title_section_more,
+        mTvGuAdapter = new VodByTagAdapter(R.layout.vod_tv_item, R.layout
+                .vod_tv_title_section_more,
                 mTvGuDataList, getContext());
+
+        mTvGuAdapter.openLoadAnimation();
+        mTvGuRecycleView.setAdapter(mTvGuAdapter);
         mTvGuAdapter.addHeaderView(mAdView);
         mTvGuAdapter.addFooterView(mAdBottomView);
-        mTvGuAdapter.openLoadAnimation();
-        mTvGuRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 3));
-        mTvGuRecycleView.setAdapter(mTvGuAdapter);
-
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
                 mTvGuRecycleView.getParent(), false);
         errorView.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +128,7 @@ public class TVSeriesFragment extends BaseFragment
                 try {
                     mITVSeriesVodPresenter.getTVSeriesDetailData();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView
                             .getParent());
                 }
@@ -190,6 +169,7 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     public void showNetError() {
+        mSwipeRefreshLayout.setRefreshing(false);
         //显示加载失败视图
         mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView.getParent());
     }
@@ -202,6 +182,10 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     public void showData(ArrayList<VodByTagBean.RowsBeanX> mTvGuDataList) {
+        //停止下拉刷新动画
+        if(mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
         //装载数据
         mTvGuAdapter.setNewData(mTvGuDataList);
         //刷新列表显示数据
@@ -209,11 +193,12 @@ public class TVSeriesFragment extends BaseFragment
         //缓存网络数据
         mITVSeriesVodPresenter.cacheTVSeriesVodData();
     }
-
     @Override
     public void onDataSucess() {
-        //停止下拉刷新动画
-        mSwipeRefreshLayout.setRefreshing(false);
+        if(mSwipeRefreshLayout.isRefreshing()){
+            //停止下拉刷新动画
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override
@@ -240,11 +225,16 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     protected void initVodByTagAdapter() {
-
+        initTvGuAdapter();
     }
 
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-        if (event.position != AppCommon.FIRST) return;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBusActivityScope.getDefault(_mActivity).unregister(this);
     }
 }

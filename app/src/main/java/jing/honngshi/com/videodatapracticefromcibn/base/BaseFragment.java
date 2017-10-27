@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -30,19 +31,29 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     private View mRootView;
     private boolean mIsMulti = false;
 
-
+    protected OnFragmentOpenDrawerListener mOpenDraweListener;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        setHasOptionsMenu(true);
     }
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentOpenDrawerListener) {
+            mOpenDraweListener = (OnFragmentOpenDrawerListener) context;
+        } else {
+            //            throw new RuntimeException(context.toString()
+            //                    + " must implement OnFragmentOpenDrawerListener");
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
         if (mRootView == null) {
-            mRootView = inflater.inflate(initLayout(), null);
+            mRootView = inflater.inflate(initLayout(),container,false);
             EventBusActivityScope.getDefault(_mActivity).register(this);
             ButterKnife.bind(this, mRootView);
             // initInjector();
@@ -67,19 +78,21 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         initData();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (getUserVisibleHint() && mRootView != null && !mIsMulti) {
-            mIsMulti = true;
-        }
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        if (getUserVisibleHint() && mRootView != null && !mIsMulti) {
+//            mIsMulti = true;
+//        }
+//    }
+
     @Override
     public void onDestroyView() {
         if (mPresenter != null) {
             mPresenter.dettachView();
         }
         super.onDestroyView();
+        EventBusActivityScope.getDefault(_mActivity).unregister(this);
     }
 
     /**
@@ -89,10 +102,28 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      * @param homeAsUpEnabled
      * @param title
      */
-    protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
-        ((BaseActivity) getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
+    protected void initToolBar(Toolbar toolbar, final boolean homeAsUpEnabled, String title) {
+        //((BaseActivity) getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
+        toolbar.setTitle(title);
+        if(homeAsUpEnabled){
+            toolbar.setNavigationIcon(R.mipmap.ic_nav);
+        }else{
+            toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOpenDraweListener != null && homeAsUpEnabled) {
+                    mOpenDraweListener.onOpenDrawer();
+                }else{
+                    onBackPressedSupport();
+                }
+            }
+        });
     }
-
+    public interface OnFragmentOpenDrawerListener {
+        void onOpenDrawer();
+    }
 
     /**
      * 绑定布局文件

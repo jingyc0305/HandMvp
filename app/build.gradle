@@ -85,7 +85,7 @@ dependencies {
     //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //adpter
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
     //stutas bar
     compile 'com.kelin.translucentbar:library:0.8.0'
     //supertextview 文字动画
