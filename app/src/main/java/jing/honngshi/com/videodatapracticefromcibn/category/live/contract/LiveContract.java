@@ -5,7 +5,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseView;
-import jing.honngshi.com.videodatapracticefromcibn.category.live.adapter.LiveMultiItemAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.GetAllListData;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveMultiItem;
 
@@ -17,22 +16,18 @@ public interface LiveContract {
 
 
     interface ILiveView extends BaseView {
-        void setHeaderView(LiveMultiItemAdapter adapter);
+        void showContent(List<LiveMultiItem> multiItems);
 
-        //void setBanner(BGABanner.Adapter<ImageView, String> adapter, List<String> banners);
-
-        void setRecyclerAdapter(LiveMultiItemAdapter adapter);
-
-        void setFooterView(LiveMultiItemAdapter adapter);
+        void showBanner(List<String> bannerimgs,List<String> bannertitles);
 
     }
 
     interface ILivePresenter extends BasePresenter<ILiveView> {
 
-        Observable<GetAllListData> getLiveList(boolean update);
+        Observable<GetAllListData> getLiveData(boolean update);
 
-        List<LiveMultiItem> parseRecommendData(GetAllListData.DataBean getAllListData);
+        List<LiveMultiItem> parseDetailLiveData(GetAllListData.DataBean getAllListData);
 
-        List<LiveMultiItem> parsePartitions(GetAllListData.DataBean getAllListData);
+
     }
 }

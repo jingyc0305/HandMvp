@@ -21,7 +21,6 @@ import java.util.List;
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
-import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.adapter.VodByTagAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
@@ -29,6 +28,7 @@ import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagBea
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.contract.TvSeriesContract;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.presenter.TvSeriesPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
+import jing.honngshi.com.videodatapracticefromcibn.widget.BounceLoadingView;
 import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
 
 /**
@@ -57,7 +57,7 @@ public class TVSeriesFragment extends BaseFragment
     private int[] tv_type_ids = new int[]{160, 153, 1, 19};
 
     private View errorView;
-
+    BounceLoadingView loadingView;
     private TvSeriesContract.ITVSeriesVodPresenter mITVSeriesVodPresenter;
     public static TVSeriesFragment newInstance() {
 
@@ -94,6 +94,8 @@ public class TVSeriesFragment extends BaseFragment
         mAdView = LayoutInflater.from(mContext).inflate(R.layout.ad_banner_layout, (ViewGroup)mTvGuRecycleView.getParent(),false);
         mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
                 (ViewGroup) mTvGuRecycleView.getParent() ,false);
+        mAdView.setVisibility(View.GONE);
+        mAdBottomView.setVisibility(View.GONE);
         tv_type1 = (TextView) mAdView.findViewById(R.id.tv_type1);
         tv_type2= (TextView) mAdView.findViewById(R.id.tv_type2);
         tv_type3 = (TextView) mAdView.findViewById(R.id.tv_type3);
@@ -108,7 +110,22 @@ public class TVSeriesFragment extends BaseFragment
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.start();
         mTvGuRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 3));
-
+        View view = LayoutInflater.from(mContext).inflate(R.layout.loading_view, (ViewGroup)mTvGuRecycleView.getParent(),false);
+        loadingView = (BounceLoadingView) view.findViewById(R.id.loadingView);
+        initLoadingView();
+    }
+    /**
+     * 初始化加载动画view
+     */
+    private void initLoadingView(){
+        loadingView.addBitmap(R.mipmap.v4);
+        loadingView.addBitmap(R.mipmap.v5);
+        loadingView.addBitmap(R.mipmap.v6);
+        loadingView.addBitmap(R.mipmap.v7);
+        loadingView.addBitmap(R.mipmap.v8);
+        loadingView.addBitmap(R.mipmap.v9);
+        loadingView.setShadowColor(Color.LTGRAY);
+        loadingView.setDuration(3000);
     }
     private void initTvGuAdapter() {
         mTvGuAdapter = new VodByTagAdapter(R.layout.vod_tv_item, R.layout
@@ -121,19 +138,16 @@ public class TVSeriesFragment extends BaseFragment
         mTvGuAdapter.addFooterView(mAdBottomView);
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
                 mTvGuRecycleView.getParent(), false);
-        errorView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        errorView.setOnClickListener(v -> {
 
-                try {
-                    mITVSeriesVodPresenter.getTVSeriesDetailData();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView
-                            .getParent());
-                }
-
+            try {
+                mITVSeriesVodPresenter.getTVSeriesDetailData();
+            } catch (Exception e) {
+                e.printStackTrace();
+                mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView
+                        .getParent());
             }
+
         });
         //设置刷新球颜色
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.YELLOW);
@@ -144,12 +158,7 @@ public class TVSeriesFragment extends BaseFragment
 //                mSwipeRefreshLayout.setRefreshing(false);
 //            }
 //        });
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mITVSeriesVodPresenter.getTVSeriesDetailData();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mITVSeriesVodPresenter.getTVSeriesDetailData());
 
     }
 
@@ -169,6 +178,7 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     public void showNetError() {
+        loadingView.stop();
         mSwipeRefreshLayout.setRefreshing(false);
         //显示加载失败视图
         mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView.getParent());
@@ -176,6 +186,8 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     public void showLoading() {
+
+        loadingView.start();
         mTvGuAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mTvGuRecycleView.getParent());
     }
 
@@ -186,6 +198,8 @@ public class TVSeriesFragment extends BaseFragment
         if(mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+        mAdView.setVisibility(View.VISIBLE);
+        mAdBottomView.setVisibility(View.VISIBLE);
         //装载数据
         mTvGuAdapter.setNewData(mTvGuDataList);
         //刷新列表显示数据
@@ -230,11 +244,5 @@ public class TVSeriesFragment extends BaseFragment
 
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBusActivityScope.getDefault(_mActivity).unregister(this);
     }
 }

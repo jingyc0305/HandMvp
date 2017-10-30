@@ -3,13 +3,11 @@ package jing.honngshi.com.videodatapracticefromcibn.category.vod.ui.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -30,6 +28,7 @@ import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagMTB
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.contract.VarietyContract;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.presenter.VarietyPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
+import jing.honngshi.com.videodatapracticefromcibn.widget.BounceLoadingView;
 import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
 
 /**
@@ -53,7 +52,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     private int[] tv_type_ids = new int[]{19,1};
 
     private View errorView;
-
+    BounceLoadingView loadingView;
     private VarietyContract.IVarietyVodPresenter mIVarietyVodPresenter;
     public static VarietyFragment newInstance() {
 
@@ -101,10 +100,26 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         mBanner.start();
         mAdBottomView = LayoutInflater.from(mContext).inflate(R.layout.ad_bottom_descrip_layout,
                 (ViewGroup) mVarietyRecycleView.getParent(),false);
-
+        mAdView.setVisibility(View.GONE);
+        mAdBottomView.setVisibility(View.GONE);
         mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 6));
+        View view = LayoutInflater.from(mContext).inflate(R.layout.loading_view, (ViewGroup)mVarietyRecycleView.getParent(),false);
+        loadingView = (BounceLoadingView) view.findViewById(R.id.loadingView);
+        initLoadingView();
     }
-
+    /**
+     * 初始化加载动画view
+     */
+    private void initLoadingView(){
+        loadingView.addBitmap(R.mipmap.v4);
+        loadingView.addBitmap(R.mipmap.v5);
+        loadingView.addBitmap(R.mipmap.v6);
+        loadingView.addBitmap(R.mipmap.v7);
+        loadingView.addBitmap(R.mipmap.v8);
+        loadingView.addBitmap(R.mipmap.v9);
+        loadingView.setShadowColor(Color.LTGRAY);
+        loadingView.setDuration(3000);
+    }
     /**
      * adapter 相关设置
      */
@@ -118,18 +133,15 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         mVodByTagMTAdapter.openLoadAnimation();
 
         //设置dapater多类型数据
-        mVodByTagMTAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                if(position == 0 || position == 1){
-                    return 3;
-                }else if(position == 2 || position == 9){
-                    return 6;
-                }else {
-                    return 2;
-                }
-
+        mVodByTagMTAdapter.setSpanSizeLookup((gridLayoutManager, position) -> {
+            if(position == 0 || position == 1){
+                return 3;
+            }else if(position == 2 || position == 9){
+                return 6;
+            }else {
+                return 2;
             }
+
         });
         mVarietyRecycleView.setAdapter(mVodByTagMTAdapter);
         // TODO: 2017/10/23 这里要解决 为什么会出现异常崩溃
@@ -184,6 +196,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
 
     @Override
     public void showNetError() {
+        loadingView.stop();
         //显示加载失败视图
         mVodByTagMTAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mVarietyRecycleView.getParent());
     }
@@ -191,6 +204,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     @Override
     public void showLoading() {
         //显示正在加载视图
+        loadingView.start();
         mVodByTagMTAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mVarietyRecycleView.getParent());
     }
 
@@ -201,6 +215,8 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         mSwipeRefreshLayout.setRefreshing(false);
         //初始化列表数据对象
         //mRowsBeanXes = mTvGuDataList;
+        mAdView.setVisibility(View.VISIBLE);
+        mAdBottomView.setVisibility(View.VISIBLE);
         //避免出现加载数据时候广告banner和脚部视图先显示出来一下,再去加载数据loading;而不是先loading再一起显示
         mAdView.setVisibility(View.VISIBLE);
         //开始轮播

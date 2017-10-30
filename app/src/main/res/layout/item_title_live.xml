@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoLinearLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -50,5 +50,5 @@
         android:layout_height="36px"
         android:layout_marginLeft="5px"
         android:layout_marginRight="@dimen/margin_size_1_left_right"
-        android:src="@mipmap/ic_live_home_more"/>
-</com.zhy.autolayout.AutoLinearLayout>
+        android:src="@mipmap/more"/>
+</LinearLayout>

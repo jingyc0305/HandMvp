@@ -65,6 +65,6 @@ public interface ICacheProviders {
      * @param evictProvider
      * @return
      */
-    @LifeCache(duration = 2, timeUnit = TimeUnit.MINUTES)
-    Observable<Reply<GetAllListData>> getLiveIndexList(Observable<GetAllListData> data, EvictProvider evictProvider);
+    @LifeCache(duration = 5, timeUnit = TimeUnit.MINUTES)
+    Observable<Reply<GetAllListData>> getLiveDatas(Observable<GetAllListData> data, DynamicKey dynamicKey, EvictProvider evictProvider);
 }

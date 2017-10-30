@@ -19,12 +19,29 @@ public class RetrofitFactory {
     private RetrofitFactory() {
     }
 
+    /**
+     * B站 Url
+     */
+    private static  String LIVE_BASE_URL = "http://api.live.bilibili.com/";
+    private static String RECOMMEND_BASE_URL = "https://app.bilibili.com/";
+    private static String VIDEO_DETAIL_SUMMARY_BASE_URL = "https://app.bilibili.com/";
+    private static String VIDEO_DETAIL_REPLY_BASE_URL = "https://api.bilibili.com/";
+    // 没有登录的情况下，使用这个User-Agent
+    public static String COMMON_UA_STR = "Mozilla/5.0 BiliDroid/5.15.0 (bbcallen@gmail.com)";
+    /**
+     * CIBN Url
+     */
     private static String baseUrl = "https://api.starschina.com/";
+    /**
+     * Banner Url
+     */
     private static String splashBaseUrl = "http://static.owspace.com/";
+
     private static OkHttpClient httpClient = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(createHttpLoggingInterceptor())
+            .addInterceptor(new UserAgentInterceptor())//自定义拦截器 用于B站媒资访问
             .build();
 
     private static VodApi vodService = new Retrofit.Builder()
@@ -35,7 +52,7 @@ public class RetrofitFactory {
             .build()
             .create(VodApi.class);
     private static LiveService liveService = new Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(LIVE_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(httpClient)
@@ -60,6 +77,7 @@ public class RetrofitFactory {
         return vodService;
     }
     public static LiveService getLiveService() {
+
         return liveService;
     }
     public static SplashService getSplashService() {

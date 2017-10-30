@@ -35,7 +35,7 @@ import jing.honngshi.com.videodatapracticefromcibn.category.BottomBar;
 import jing.honngshi.com.videodatapracticefromcibn.category.BottomBarTab;
 import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
-import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.parent.LiveRootFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.mine.ui.fragment.MineFirstFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.mine.ui.fragment.parent.MineRootFragment;
@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity implements NavigationView
                     if (currentFragment instanceof VodRootFragment) {
                         currentFragment.popToChild(VodFragmentMain.class, false);
                     } else if (currentFragment instanceof LiveRootFragment) {
-                        currentFragment.popToChild(LiveFirstFragment.class, false);
+                        currentFragment.popToChild(LiveFragment.class, false);
                     } else if (currentFragment instanceof NewsRootFragment) {
                         currentFragment.popToChild(NewsFirstFragment.class, false);
                     } else if (currentFragment instanceof PictureRootFragment) {

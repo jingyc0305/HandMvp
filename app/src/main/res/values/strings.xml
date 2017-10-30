@@ -103,7 +103,10 @@
         <item>2</item>
         <item>3</item>
     </string-array>
-
+    <string-array name="tab_titles_main_home">
+        <item>直播</item>
+        <item>推荐</item>
+    </string-array>
     <string-array name="query_suggestions">
         <item>Android</item>
         <item>Android Search</item>
@@ -162,4 +165,11 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="live_home_follow_anchor">关注</string>
+    <string name="live_home_entertainment">娱乐</string>
+    <string name="live_home_game">游戏</string>
+    <string name="live_home_mobile_game">手游</string>
+    <string name="live_home_painting">绘画</string>
+    <string name="live_home_all_live">全部直播</string>
 </resources>

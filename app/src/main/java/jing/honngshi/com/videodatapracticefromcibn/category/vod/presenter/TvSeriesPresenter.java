@@ -100,8 +100,8 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
 
     @Override
     public void getTVSeriesDetailData() {
-        Logger.d("=========getTVSeriesDetailData===========");
         mITVSeriesVodView.showLoading();
+
         //获取分类下的数据 古装正剧
         Observable<VodByTagBean> mVodByTagBean = getVodService().getVodByTagDatas("Android", "2.0","MzljMjU0N2UwYjk3",
                 "6.0.1", "com.sumavision.sanping.gudou","1","10",categoryTvId,categotyTVFirstId);
@@ -151,7 +151,6 @@ public class TvSeriesPresenter extends AbsBasePresenter<TvSeriesContract.ITVSeri
                             mTvGuDataList.add(item.getRows().get(i));
                             mTvGuDataList.add(item.getRows().get(i));
                         }
-                        Logger.d("========onDataSucess showData=========");
                         mITVSeriesVodView.onDataSucess();
                         mITVSeriesVodView.showData(mTvGuDataList);
                     }

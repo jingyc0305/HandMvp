@@ -100,6 +100,7 @@ public class VarietyPresenter extends VarietyContract.IVarietyVodPresenter {
     @Override
     public void getVarietyDetailData() {
         mIVarietyVodView.showLoading();
+
         //获取分类下的数据 综艺-真人秀
         Logger.d("当前栏目ID: "+ categoryVarietyId);
         Logger.d("综艺下的栏目ID: "+ categotyVarietyFirstId);

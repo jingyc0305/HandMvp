@@ -49,4 +49,15 @@ public class TimeUtil {
         String str = new SimpleDateFormat(formate, Locale.ENGLISH).format(new Date());
         return str;
     }
+
+    public static String handleCount2TenThousand(int count) {
+        if (count == 0) {
+            return "--";
+        }
+        if (count / 10000 > 0) {
+            double num = (double) count / 10000;
+            return String.format("%.2f", num) + "万";
+        }
+        return String.valueOf(count);
+    }
 }

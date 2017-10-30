@@ -8,7 +8,7 @@ import org.greenrobot.eventbus.Subscribe;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.BaseRootFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
-import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.parent.bigchild.LiveFragmentMain;
 
 /**
  * Created by JIngYuchun on 2017/10/25.
@@ -59,12 +59,19 @@ public class LiveRootFragment extends BaseRootFragment {
     protected void initVodByTagAdapter() {
 
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (findChildFragment(LiveFragmentMain.class) == null) {
+            loadRootFragment(R.id.live_root_container, LiveFragmentMain.newInstance());
+        }
+    }
+
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        if (findChildFragment(LiveFirstFragment.class) == null) {
-            loadRootFragment(R.id.live_root_container, LiveFirstFragment.newInstance());
-        }
+
     }
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {

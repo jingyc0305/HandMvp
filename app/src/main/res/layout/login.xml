@@ -16,7 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            app:srcCompat="@mipmap/logo"/>
+            app:srcCompat="@mipmap/logo_new_512"/>
 
         <ImageView
             android:id="@+id/imageView5"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="30dp"
-            android:layout_marginRight="100dp"
+            android:layout_marginRight="90dp"
             app:srcCompat="@mipmap/ic_drawer_zhihu"/>
     </FrameLayout>
 

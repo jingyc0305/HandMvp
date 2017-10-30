@@ -53,14 +53,13 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
         if (mRootView == null) {
-            mRootView = inflater.inflate(initLayout(),container,false);
+            mRootView = inflater.inflate(initLayout(),null);
             EventBusActivityScope.getDefault(_mActivity).register(this);
             ButterKnife.bind(this, mRootView);
             // initInjector();
             initView();
             initVodByTagAdapter();
             initPresenter();
-            // initSwipeRefresh();
         }
         ViewGroup parent = (ViewGroup) mRootView.getParent();
         if (parent != null) {

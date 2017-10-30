@@ -23,7 +23,6 @@ import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.app.AppCommon;
 import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
-import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.adapter.VodMainAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryBean;
@@ -171,12 +170,6 @@ public class VodFragmentMain extends BaseFragment implements
 
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBusActivityScope.getDefault(_mActivity).unregister(this);
     }
 
     @Override

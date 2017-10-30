@@ -7,7 +7,7 @@ public class LiveMultiItem implements MultiItemEntity {
     public static final int TITLE = 1;
     public static final int ITEM = 2;
     public static final int BANNER = 3;
-    public static final int BOTTOM = 4;
+    //public static final int BOTTOM = 4;
 
     private int itemType;
     private int spanSize;
@@ -42,9 +42,9 @@ public class LiveMultiItem implements MultiItemEntity {
             case BANNER:
                 spanSize = 2;
                 break;
-            case BOTTOM:
-                spanSize = 2;
-                break;
+//            case BOTTOM:
+//                spanSize = 2;
+//                break;
         }
     }
 
