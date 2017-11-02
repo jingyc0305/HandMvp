@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/HandMvp.iml" filepath="$PROJECT_DIR$/HandMvp.iml" />
       <module fileurl="file://$PROJECT_DIR$/VideoDataPracticeFromCIBN.iml" filepath="$PROJECT_DIR$/VideoDataPracticeFromCIBN.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
