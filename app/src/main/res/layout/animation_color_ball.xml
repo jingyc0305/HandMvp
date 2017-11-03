@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:smaug="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="horizontal">
+
+    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
+        android:id="@+id/ball_one"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="70dp"
+        smaug:small_ball_color="@color/red"/>
+
+    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
+        android:id="@+id/ball_two"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        smaug:small_ball_color="@color/orange"/>
+
+    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
+        android:id="@+id/ball_three"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="20dp"
+        smaug:small_ball_color="@color/yellow"/>
+
+    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
+        android:id="@+id/ball_four"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        smaug:small_ball_color="@color/lightgreen"/>
+
+    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
+        android:id="@+id/ball_five"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="50dp"
+        smaug:small_ball_color="@color/purple"/>
+</LinearLayout>

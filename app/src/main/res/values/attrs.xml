@@ -3,4 +3,7 @@
     <declare-styleable name="loadview">
         <attr name="background_color" format="color"/>
     </declare-styleable>
+    <declare-styleable name="SmallBallView">
+        <attr name="small_ball_color" format="color"/>
+    </declare-styleable>
 </resources>

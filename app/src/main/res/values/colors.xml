@@ -31,4 +31,13 @@
     <color name="bottom_text_live">#fb7299</color>
     <color name="footer_all_live_btn_bg_live">#FAFAFA</color>
     <color name="footer_all_live_btn_stroke_live">#BFBFBF</color>
+
+    <!--loadingview-->
+
+    <color name="red">#FF0000</color> <!--红色 -->
+    <color name="orange">#FFA500</color> <!--橙色 -->
+    <color name="lightgoldenrodyellow">#FAFAD2</color> <!--亮金黄色 -->
+    <color name="purple">#800080</color> <!--紫色 -->
+    <color name="yellow">#FFFF00</color>
+    <color name="lightgreen">#90EE90</color><!--亮绿色 -->
 </resources>

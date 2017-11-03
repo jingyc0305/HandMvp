@@ -149,18 +149,15 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         mVodByTagMTAdapter.addFooterView(mAdBottomView);
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
                 mVarietyRecycleView.getParent(), false);
-        errorView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        errorView.setOnClickListener(v -> {
 
-                try {
-                    mIVarietyVodPresenter.getVarietyDetailData();
-                } catch (Exception e) {
-                    mVodByTagMTAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mVarietyRecycleView
-                            .getParent());
-                }
-
+            try {
+                mIVarietyVodPresenter.getVarietyDetailData();
+            } catch (Exception e) {
+                mVodByTagMTAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mVarietyRecycleView
+                        .getParent());
             }
+
         });
         //设置刷新球颜色
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.RED, Color.YELLOW);
@@ -171,12 +168,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
 //                mSwipeRefreshLayout.setRefreshing(false);
 //            }
 //        });
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mIVarietyVodPresenter.getVarietyDetailData();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mIVarietyVodPresenter.getVarietyDetailData());
 
     }
 
@@ -205,7 +197,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     public void showLoading() {
         //显示正在加载视图
         loadingView.start();
-        mVodByTagMTAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mVarietyRecycleView.getParent());
+        mVodByTagMTAdapter.setEmptyView(R.layout.loadingview_smalllball, (ViewGroup) mVarietyRecycleView.getParent());
     }
 
 

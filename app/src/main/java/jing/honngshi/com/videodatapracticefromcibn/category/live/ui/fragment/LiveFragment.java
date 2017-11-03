@@ -57,13 +57,14 @@ public class LiveFragment extends BaseFragment<LivePresenter> implements LiveCon
     @Override
     public void showLoading() {
         loadingView.start();
-        mLiveMultiItemAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mLiveRecyclerView.getParent());
+        mLiveMultiItemAdapter.setEmptyView(R.layout.loadingview_smalllball, (ViewGroup) mLiveRecyclerView.getParent());
     }
 
     @Override
     public void showNetError() {
         //显示加载失败视图
         loadingView.stop();
+        mSwipeRefreshLayout.setRefreshing(false);
         mLiveMultiItemAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mLiveRecyclerView.getParent());
     }
 

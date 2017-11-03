@@ -188,7 +188,7 @@ public class TVSeriesFragment extends BaseFragment
     public void showLoading() {
 
         loadingView.start();
-        mTvGuAdapter.setEmptyView(R.layout.loading_view, (ViewGroup) mTvGuRecycleView.getParent());
+        mTvGuAdapter.setEmptyView(R.layout.loadingview_smalllball, (ViewGroup) mTvGuRecycleView.getParent());
     }
 
 
