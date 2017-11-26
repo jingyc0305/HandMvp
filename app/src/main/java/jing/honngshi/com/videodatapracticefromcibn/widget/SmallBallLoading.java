@@ -54,8 +54,8 @@ public class SmallBallLoading extends LinearLayout {
         SmallBallViewOne = (SmallBallView) findViewById(R.id.ball_one);
         SmallBallViewTwo = (SmallBallView) findViewById(R.id.ball_two);
         SmallBallViewThree = (SmallBallView) findViewById(R.id.ball_three);
-        SmallBallViewFour = (SmallBallView) findViewById(R.id.ball_four);
-        SmallBallViewFive = (SmallBallView) findViewById(R.id.ball_five);
+        //SmallBallViewFour = (SmallBallView) findViewById(R.id.ball_four);
+        //SmallBallViewFive = (SmallBallView) findViewById(R.id.ball_five);
 
     }
 
@@ -72,9 +72,9 @@ public class SmallBallLoading extends LinearLayout {
         // 设置颜色
         SmallBallViewOne.setLoadingColor(getResources().getColor(R.color.red));
         SmallBallViewTwo.setLoadingColor(getResources().getColor(R.color.orange));
-        SmallBallViewThree.setLoadingColor(getResources().getColor(R.color.yellow));
-        SmallBallViewFour.setLoadingColor(getResources().getColor(R.color.lightgreen));
-        SmallBallViewFive.setLoadingColor(getResources().getColor(R.color.purple));
+        SmallBallViewThree.setLoadingColor(getResources().getColor(R.color.lightgreen));
+        //SmallBallViewFour.setLoadingColor(getResources().getColor(R.color.lightgreen));
+        //SmallBallViewFive.setLoadingColor(getResources().getColor(R.color.purple));
         //变大变小
         startAni();
 
@@ -99,8 +99,8 @@ public class SmallBallLoading extends LinearLayout {
         SmallBallViewOne.clearAnimation();
         SmallBallViewTwo.clearAnimation();
         SmallBallViewThree.clearAnimation();
-        SmallBallViewFour.clearAnimation();
-        SmallBallViewFive.clearAnimation();
+        //SmallBallViewFour.clearAnimation();
+        //SmallBallViewFive.clearAnimation();
 
     }
 
@@ -113,8 +113,8 @@ public class SmallBallLoading extends LinearLayout {
         SmallBallViewOne.setLoadingColor(color);
         SmallBallViewTwo.setLoadingColor(color);
         SmallBallViewThree.setLoadingColor(color);
-        SmallBallViewFour.setLoadingColor(color);
-        SmallBallViewFive.setLoadingColor(color);
+        //SmallBallViewFour.setLoadingColor(color);
+        //SmallBallViewFive.setLoadingColor(color);
     }
 
     public void startAni() {
@@ -141,26 +141,26 @@ public class SmallBallLoading extends LinearLayout {
         mScaleAnimation3.setRepeatMode(Animation.REVERSE);
 
 
-        mScaleAnimation4 = new ScaleAnimation(1, 0, 1, 0, 1, 0.5f, 1, 0.5f);
-        mScaleAnimation4.setDuration(700);
-        mScaleAnimation4.setStartOffset(80);
-        mScaleAnimation4.setInterpolator(new LinearInterpolator());
-        mScaleAnimation4.setRepeatCount(-1);
-        mScaleAnimation4.setRepeatMode(Animation.REVERSE);
-
-        mScaleAnimation5 = new ScaleAnimation(1, 0, 1, 0, 1, 0.5f, 1, 0.5f);
-        mScaleAnimation5.setDuration(700);
-        mScaleAnimation5.setStartOffset(100);
-        mScaleAnimation5.setInterpolator(new LinearInterpolator());
-        mScaleAnimation5.setRepeatCount(-1);
-        mScaleAnimation5.setRepeatMode(Animation.REVERSE);
+//        mScaleAnimation4 = new ScaleAnimation(1, 0, 1, 0, 1, 0.5f, 1, 0.5f);
+//        mScaleAnimation4.setDuration(700);
+//        mScaleAnimation4.setStartOffset(80);
+//        mScaleAnimation4.setInterpolator(new LinearInterpolator());
+//        mScaleAnimation4.setRepeatCount(-1);
+//        mScaleAnimation4.setRepeatMode(Animation.REVERSE);
+//
+//        mScaleAnimation5 = new ScaleAnimation(1, 0, 1, 0, 1, 0.5f, 1, 0.5f);
+//        mScaleAnimation5.setDuration(700);
+//        mScaleAnimation5.setStartOffset(100);
+//        mScaleAnimation5.setInterpolator(new LinearInterpolator());
+//        mScaleAnimation5.setRepeatCount(-1);
+//        mScaleAnimation5.setRepeatMode(Animation.REVERSE);
 
 
         SmallBallViewOne.startAnimation(mScaleAnimation1);
         SmallBallViewTwo.startAnimation(mScaleAnimation2);
         SmallBallViewThree.startAnimation(mScaleAnimation3);
-        SmallBallViewFour.startAnimation(mScaleAnimation4);
-        SmallBallViewFive.startAnimation(mScaleAnimation5);
+        //SmallBallViewFour.startAnimation(mScaleAnimation4);
+        //SmallBallViewFive.startAnimation(mScaleAnimation5);
 
 
     }

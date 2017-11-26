@@ -4,6 +4,7 @@ package jing.honngshi.com.videodatapracticefromcibn.setting;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,10 +15,11 @@ import com.kelin.translucentbar.library.TranslucentBarManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import jing.honngshi.com.videodatapracticefromcibn.R;
-import jing.honngshi.com.videodatapracticefromcibn.app.JingApp;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseActivity;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.CacheUtil;
+
+import static jing.honngshi.com.videodatapracticefromcibn.app.JingApp.isLogined;
 
 
 public class SettingsActivity extends BaseActivity implements SettingContract.ISettingView{
@@ -53,17 +55,19 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
 
         initToolBar(mToolbar,true,"设置");
         try{
+            Log.i("JingYuchun", "getCacheDir()="+getExternalCacheDir());
             //设置缓存大小
-            mSuperTextView.setRightString(CacheUtil.getCacheSize(getCacheDir()));
+            mSuperTextView.setRightString(CacheUtil.getCacheSize(getExternalCacheDir()));
         }catch (Exception e){
             e.printStackTrace();
         }
         // TODO: 2017/10/25 这里对于重新登录的状态为未做处理 主要是重新登录后登出按钮再次显示 有时间弄吧
-//        if(isLogined){
-//            //mSuperButton.setVisibility(View.VISIBLE);
-//        }
+        if(isLogined){
+            //mSuperButton.setVisibility(View.VISIBLE);
+        }
     }
 
+    @OnClick
     @Override
     public void initData() {
 
@@ -83,7 +87,7 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
     public void LoginOutOK() {
 
         mSuperButton.setVisibility(View.GONE);
-        JingApp.isLogined = false;
+        isLogined = false;
         Toast.makeText(SettingsActivity.this,"退出成功",Toast.LENGTH_SHORT).show();
     }
 
@@ -123,17 +127,28 @@ public class SettingsActivity extends BaseActivity implements SettingContract.IS
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(homeAsUpEnabled);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressedSupport();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> onBackPressedSupport());
     }
 
-    @OnClick(R.id.cache_tv)
-    public void onClick(){
-        CacheUtil.cleanInternalCache(this);
-        mSuperTextView.setRightString("");
+    @OnClick({R.id.login_submit_btn})
+    public void onLoginClick(){
+
+        switch (mSuperButton.getId()){
+            case R.id.login_submit_btn:
+                mSettingPresenter.LoginOut();
+                break;
+        }
+
+    }
+    @OnClick({R.id.cache_tv})
+    public void onOhterClick(){
+
+        switch (mSuperTextView.getId()){
+            case R.id.cache_tv:
+                CacheUtil.cleanInternalCache(this);
+                mSuperTextView.setRightString("");
+                break;
+        }
+
     }
 }

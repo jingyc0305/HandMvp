@@ -33,6 +33,10 @@ public class RetrofitFactory {
      */
     private static String baseUrl = "https://api.starschina.com/";
     /**
+     * 全民tv baseUrl
+     */
+    private static String QuanminBaseUrl = "http://www.quanmin.tv/";
+    /**
      * Banner Url
      */
     private static String splashBaseUrl = "http://static.owspace.com/";
@@ -53,6 +57,14 @@ public class RetrofitFactory {
             .create(VodApi.class);
     private static LiveService liveService = new Retrofit.Builder()
             .baseUrl(LIVE_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(httpClient)
+            .build()
+            .create(LiveService.class);
+
+    private static LiveService liveRecommendService = new Retrofit.Builder()
+            .baseUrl(QuanminBaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(httpClient)
@@ -79,6 +91,10 @@ public class RetrofitFactory {
     public static LiveService getLiveService() {
 
         return liveService;
+    }
+    public static LiveService getRecommendLiveService() {
+
+        return liveRecommendService;
     }
     public static SplashService getSplashService() {
         return splashService;

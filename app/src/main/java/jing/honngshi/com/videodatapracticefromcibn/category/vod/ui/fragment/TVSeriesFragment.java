@@ -28,7 +28,6 @@ import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagBea
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.contract.TvSeriesContract;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.presenter.TvSeriesPresenter;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
-import jing.honngshi.com.videodatapracticefromcibn.widget.BounceLoadingView;
 import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
 
 /**
@@ -57,7 +56,7 @@ public class TVSeriesFragment extends BaseFragment
     private int[] tv_type_ids = new int[]{160, 153, 1, 19};
 
     private View errorView;
-    BounceLoadingView loadingView;
+
     private TvSeriesContract.ITVSeriesVodPresenter mITVSeriesVodPresenter;
     public static TVSeriesFragment newInstance() {
 
@@ -109,23 +108,6 @@ public class TVSeriesFragment extends BaseFragment
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.start();
-        mTvGuRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 3));
-        View view = LayoutInflater.from(mContext).inflate(R.layout.loading_view, (ViewGroup)mTvGuRecycleView.getParent(),false);
-        loadingView = (BounceLoadingView) view.findViewById(R.id.loadingView);
-        initLoadingView();
-    }
-    /**
-     * 初始化加载动画view
-     */
-    private void initLoadingView(){
-        loadingView.addBitmap(R.mipmap.v4);
-        loadingView.addBitmap(R.mipmap.v5);
-        loadingView.addBitmap(R.mipmap.v6);
-        loadingView.addBitmap(R.mipmap.v7);
-        loadingView.addBitmap(R.mipmap.v8);
-        loadingView.addBitmap(R.mipmap.v9);
-        loadingView.setShadowColor(Color.LTGRAY);
-        loadingView.setDuration(3000);
     }
     private void initTvGuAdapter() {
         mTvGuAdapter = new VodByTagAdapter(R.layout.vod_tv_item, R.layout
@@ -133,9 +115,10 @@ public class TVSeriesFragment extends BaseFragment
                 mTvGuDataList, getContext());
 
         mTvGuAdapter.openLoadAnimation();
-        mTvGuRecycleView.setAdapter(mTvGuAdapter);
+        mTvGuRecycleView.setLayoutManager(new MyGridLayoutManger(_mActivity, 3));
         mTvGuAdapter.addHeaderView(mAdView);
-        mTvGuAdapter.addFooterView(mAdBottomView);
+        //mTvGuAdapter.addFooterView(mAdBottomView);
+        mTvGuRecycleView.setAdapter(mTvGuAdapter);
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
                 mTvGuRecycleView.getParent(), false);
         errorView.setOnClickListener(v -> {
@@ -178,7 +161,6 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     public void showNetError() {
-        loadingView.stop();
         mSwipeRefreshLayout.setRefreshing(false);
         //显示加载失败视图
         mTvGuAdapter.setEmptyView(R.layout.empty_view, (ViewGroup) mTvGuRecycleView.getParent());
@@ -186,8 +168,6 @@ public class TVSeriesFragment extends BaseFragment
 
     @Override
     public void showLoading() {
-
-        loadingView.start();
         mTvGuAdapter.setEmptyView(R.layout.loadingview_smalllball, (ViewGroup) mTvGuRecycleView.getParent());
     }
 
@@ -203,7 +183,7 @@ public class TVSeriesFragment extends BaseFragment
         //装载数据
         mTvGuAdapter.setNewData(mTvGuDataList);
         //刷新列表显示数据
-        mTvGuAdapter.notifyDataSetChanged();
+        //mTvGuAdapter.notifyDataSetChanged();
         //缓存网络数据
         mITVSeriesVodPresenter.cacheTVSeriesVodData();
     }

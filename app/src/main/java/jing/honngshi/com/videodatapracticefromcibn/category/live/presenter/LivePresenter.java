@@ -22,8 +22,7 @@ import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveMultiI
 import jing.honngshi.com.videodatapracticefromcibn.category.live.contract.LiveContract;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory;
 
-import static jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory
-        .getLiveService;
+import static jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory.getLiveService;
 
 /**
  * Created by JIngYuchun on 2017/10/27.
@@ -45,12 +44,14 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                     public ObservableSource<GetAllListData> apply(@NonNull Observable<GetAllListData> resultObservable) throws Exception {
                             Logger.d("===getLiveData===apply========");
                         return Repository
-                                .getICache()
-                                .getLiveDatas(resultObservable, new DynamicKey("get_live_data"),
-                                        new EvictDynamicKey(update))
-                                .map(resultReply -> resultReply.getData());
+                                .getICache().getLiveDatas(resultObservable,new DynamicKey("get_live"),new EvictDynamicKey(update))
+                                .map(getAllListData -> getAllListData);
+
                     }
                 });
+//        .getLiveDatas(resultObservable, new DynamicKey("get_live_data"),
+//                new EvictDynamicKey(update))
+//                .map(resultReply -> resultReply.getData());
     }
 
     @Override
@@ -172,10 +173,11 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                 .observeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
+                    Logger.d("======loadLiveData= showLoading=======");
                     mILiveView.showLoading();
                 })
                 .doFinally(()-> {
-
+                    Logger.d("======loadLiveData======doFinally==");
                 })
                 .observeOn(Schedulers.io())
                 .map(getAllListDataResult ->{
@@ -230,10 +232,9 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
      */
     public void loadData(){
         mILiveView.showLoading();
-
-        RetrofitFactory
+        Repository.getICache().getLiveDatas(RetrofitFactory
                 .getLiveService()
-                .getLiveIndexList()
+                .getLiveIndexList(),new DynamicKey("get_live_data"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<GetAllListData>() {
@@ -265,7 +266,6 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                             // 更新UI
                             mILiveView.showContent(data);
                         }
-
                     }
 
                     @Override

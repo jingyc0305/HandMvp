@@ -65,6 +65,11 @@ public class AppUtil {
         float scale = paramContext.getResources().getDisplayMetrics().density;
         return (int)(0.5F + paramFloat * scale);
     }
+    public static int px2dp(Context paramContext, float paramFloat)
+    {
+        float scale = paramContext.getResources().getDisplayMetrics().density;
+        return (int)(0.5F + paramFloat / scale);
+    }
     public static int getWindowWidth(Context paramContext)
     {
         return getWindowManager(paramContext).getDefaultDisplay().getWidth();

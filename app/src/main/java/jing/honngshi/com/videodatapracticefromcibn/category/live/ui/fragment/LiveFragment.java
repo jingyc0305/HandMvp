@@ -155,7 +155,7 @@ public class LiveFragment extends BaseFragment<LivePresenter> implements LiveCon
         mBanner.setImages(bannerimgs);
         mBanner.setBannerTitles(bannertitles);
         mBanner.setBannerAnimation(Transformer.DepthPage);
-        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         mBanner.setDelayTime(4000);
         mBanner.setIndicatorGravity(BannerConfig.RIGHT);
         mBanner.setImageLoader(new GlideImageLoader());

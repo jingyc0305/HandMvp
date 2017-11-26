@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.allen.library.SuperButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:stv="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/live_refresh_btn"
+    android:layout_width="80dp"
+    android:layout_height="25dp"
+    android:layout_marginTop="10dp"
+    android:text="换一批看看"
+    android:textColor="#898789"
+    stv:sSolidColor="@color/white"
+    android:textSize="10sp"
+    stv:sCornersRadius="28dp"
+    android:gravity="center"
+    android:layout_gravity="center_horizontal"
+    stv:sStrokeColor="#898789"
+    stv:sStrokeWidth="0.2dp" />
+<!--<com.allen.library.SuperButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:stv="http://schemas.android.com/apk/res-auto"
+    android:layout_width="120dp"
+    android:padding="2dp"
+    android:layout_height="wrap_content"
+    stv:sCenterTextString="换一批看看"
+    stv:sCenterTextColor = "#898789"
+    stv:sCenterTextSize = "12sp"
+    android:layout_marginTop="8dp"
+    android:layout_gravity="center_horizontal"
+    stv:sLeftIconRes="@mipmap/refresh"
+    stv:sShapeCornersRadius="15dp"
+    stv:sShapeStrokeColor="#898789"
+    stv:sUseShape="true">
+</com.allen.library.SuperButton>-->

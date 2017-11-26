@@ -20,7 +20,6 @@ import java.util.List;
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
-import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.adapter.VodByTagMTAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
@@ -102,7 +101,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
                 (ViewGroup) mVarietyRecycleView.getParent(),false);
         mAdView.setVisibility(View.GONE);
         mAdBottomView.setVisibility(View.GONE);
-        mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(getContext(), 6));
+
         View view = LayoutInflater.from(mContext).inflate(R.layout.loading_view, (ViewGroup)mVarietyRecycleView.getParent(),false);
         loadingView = (BounceLoadingView) view.findViewById(R.id.loadingView);
         initLoadingView();
@@ -131,7 +130,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         mVodByTagMTAdapter = new VodByTagMTAdapter(mRowsBeanXes,adUrlList,adTitles);
 
         mVodByTagMTAdapter.openLoadAnimation();
-
+        mVarietyRecycleView.setLayoutManager(new MyGridLayoutManger(_mActivity, 6));
         //设置dapater多类型数据
         mVodByTagMTAdapter.setSpanSizeLookup((gridLayoutManager, position) -> {
             if(position == 0 || position == 1){
@@ -143,10 +142,10 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
             }
 
         });
-        mVarietyRecycleView.setAdapter(mVodByTagMTAdapter);
-        // TODO: 2017/10/23 这里要解决 为什么会出现异常崩溃
+        // TODO: 2017/10/23 这里要解决 为什么会出现异常
         mVodByTagMTAdapter.addHeaderView(mAdView);
-        mVodByTagMTAdapter.addFooterView(mAdBottomView);
+        //mVodByTagMTAdapter.addFooterView(mAdBottomView);
+        mVarietyRecycleView.setAdapter(mVodByTagMTAdapter);
         errorView = LayoutInflater.from(mContext).inflate(R.layout.empty_view, (ViewGroup)
                 mVarietyRecycleView.getParent(), false);
         errorView.setOnClickListener(v -> {
@@ -216,7 +215,7 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
         //装载数据
         mVodByTagMTAdapter.setNewData(mTvGuDataList);
         //刷新列表显示数据
-        mVodByTagMTAdapter.notifyDataSetChanged();
+        //mVodByTagMTAdapter.notifyDataSetChanged();
         //缓存网络数据
         mIVarietyVodPresenter.cacheVarietyVodData();
 
@@ -246,9 +245,5 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
     }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBusActivityScope.getDefault(_mActivity).unregister(this);
-    }
+
 }

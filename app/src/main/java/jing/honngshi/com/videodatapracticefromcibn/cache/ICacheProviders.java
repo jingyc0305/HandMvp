@@ -6,10 +6,9 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
-import io.rx_cache2.EvictProvider;
 import io.rx_cache2.LifeCache;
-import io.rx_cache2.Reply;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.GetAllListData;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveRecommend;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryBean;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagBean;
@@ -62,9 +61,18 @@ public interface ICacheProviders {
     Observable<VodByTagMTBean> getVodByTagMTDatas(Observable<VodByTagMTBean> categorys, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
     /**
      * 缓存直播数据
-     * @param evictProvider
+     * @param dynamicKey
+     * @param evictDynamicKey
      * @return
      */
     @LifeCache(duration = 5, timeUnit = TimeUnit.MINUTES)
-    Observable<Reply<GetAllListData>> getLiveDatas(Observable<GetAllListData> data, DynamicKey dynamicKey, EvictProvider evictProvider);
+    Observable<GetAllListData> getLiveDatas(Observable<GetAllListData> data, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
+    /**
+     * 缓存直播推荐数据
+     * @param dynamicKey
+     * @param evictDynamicKey
+     * @return
+     */
+    @LifeCache(duration = 5, timeUnit = TimeUnit.MINUTES)
+    Observable<LiveRecommend> getLiveRecommendCacheData(Observable<LiveRecommend> data, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
 }

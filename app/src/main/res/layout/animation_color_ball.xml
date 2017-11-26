@@ -19,7 +19,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="5dp"
         smaug:small_ball_color="@color/orange"/>
 
     <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
@@ -27,23 +27,24 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        smaug:small_ball_color="@color/yellow"/>
-
-    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
-        android:id="@+id/ball_four"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="50dp"
         smaug:small_ball_color="@color/lightgreen"/>
 
-    <jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView
-        android:id="@+id/ball_five"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="50dp"
-        smaug:small_ball_color="@color/purple"/>
+    <!--<jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView-->
+        <!--android:id="@+id/ball_four"-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="20dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--smaug:small_ball_color="@color/lightgreen"/>-->
+
+    <!--<jing.honngshi.com.videodatapracticefromcibn.widget.SmallBallView-->
+        <!--android:id="@+id/ball_five"-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="20dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="50dp"-->
+        <!--smaug:small_ball_color="@color/purple"/>-->
 </LinearLayout>
