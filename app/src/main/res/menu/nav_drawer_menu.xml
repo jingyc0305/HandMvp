@@ -4,28 +4,28 @@
         <menu>
             <item
                 android:id="@+id/drawer_vod"
-                android:icon="@mipmap/type_vod_select"
+                android:icon="@drawable/vector_drawable_vod"
                 android:checkable="true"
                 android:checked="true"
                 android:title="@string/type_vod"/>
             <item
                 android:id="@+id/drawer_live"
-                android:icon="@mipmap/type_live_select"
+                android:icon="@drawable/vector_drawable_live"
                 android:checkable="true"
                 android:title="@string/type_live"/>
             <item
                 android:id="@+id/drawer_news"
-                android:icon="@mipmap/type_news_select"
+                android:icon="@drawable/vector_drawable_news"
                 android:checkable="true"
                 android:title="@string/type_news"/>
             <item
                 android:id="@+id/drawer_picture"
-                android:icon="@mipmap/type_pic_select"
+                android:icon="@drawable/vector_drawable_pic"
                 android:checkable="true"
                 android:title="@string/type_picture"/>
             <item
                 android:id="@+id/drawer_video"
-                android:icon="@mipmap/smile_video"
+                android:icon="@drawable/vector_drawable_video"
                 android:checkable="true"
                 android:title="@string/type_video"/>
         </menu>

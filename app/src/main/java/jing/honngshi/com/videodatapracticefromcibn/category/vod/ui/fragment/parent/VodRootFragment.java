@@ -6,6 +6,9 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.BaseRootFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
@@ -77,5 +80,12 @@ public class VodRootFragment extends BaseRootFragment {
     public void onNewBundle(Bundle args) {
         super.onNewBundle(args);
         Toast.makeText(_mActivity, args.getString("from"), Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

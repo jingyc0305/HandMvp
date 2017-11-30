@@ -5,10 +5,14 @@ import android.support.annotation.Nullable;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.BaseRootFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
-import jing.honngshi.com.videodatapracticefromcibn.category.picture.ui.fragment.PictureFirstFragment;
+import jing.honngshi.com.videodatapracticefromcibn.category.picture.ui.fragment
+        .PictureFirstFragment;
 
 /**
  * Created by JIngYuchun on 2017/10/25.
@@ -67,5 +71,12 @@ public class PictureRootFragment extends BaseRootFragment {
     }
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

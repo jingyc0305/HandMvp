@@ -3,7 +3,7 @@ package jing.honngshi.com.videodatapracticefromcibn.category.live.bean;
 
 import java.util.List;
 
-public class GetAllListData {
+public class BLiveData {
     private int code;
     private String msg;
     private String message;

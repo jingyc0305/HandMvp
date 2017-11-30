@@ -16,7 +16,9 @@ import com.youth.banner.Transformer;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
@@ -27,6 +29,7 @@ import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTag
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.VodByTagBean;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.contract.TvSeriesContract;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.presenter.TvSeriesPresenter;
+import jing.honngshi.com.videodatapracticefromcibn.home.scrollview.ObservableScrollView;
 import jing.honngshi.com.videodatapracticefromcibn.utils.otherutil.GlideImageLoader;
 import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
 
@@ -35,7 +38,7 @@ import jing.honngshi.com.videodatapracticefromcibn.widget.MyGridLayoutManger;
  */
 
 public class TVSeriesFragment extends BaseFragment
-        implements TvSeriesContract.ITVSeriesVodView {
+        implements TvSeriesContract.ITVSeriesVodView ,ObservableScrollView.OnScrollListener{
 
     List<String> adUrlList = new ArrayList<String>();
     List<String> adTitles = new ArrayList();
@@ -56,7 +59,7 @@ public class TVSeriesFragment extends BaseFragment
     private int[] tv_type_ids = new int[]{160, 153, 1, 19};
 
     private View errorView;
-
+    boolean isBottomShow = true;
     private TvSeriesContract.ITVSeriesVodPresenter mITVSeriesVodPresenter;
     public static TVSeriesFragment newInstance() {
 
@@ -224,5 +227,17 @@ public class TVSeriesFragment extends BaseFragment
 
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
+    }
+
+    @Override
+    public void onScroll(int scrollY) {
+
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", mTvGuRecycleView);
+        return map;
     }
 }

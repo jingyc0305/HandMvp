@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
@@ -60,5 +63,12 @@ public class NewsFragmentMain extends BaseFragment {
 
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

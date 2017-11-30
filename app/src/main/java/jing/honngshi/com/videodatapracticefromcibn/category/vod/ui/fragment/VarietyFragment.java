@@ -15,7 +15,9 @@ import com.youth.banner.Transformer;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
@@ -245,5 +247,11 @@ public class VarietyFragment extends BaseFragment implements VarietyContract.IVa
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
     }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
 
+        map.put("RecyclerView", mVarietyRecycleView);
+        return map;
+    }
 }

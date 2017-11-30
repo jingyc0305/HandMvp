@@ -19,6 +19,9 @@ import com.umeng.socialize.utils.ShareBoardlistener;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
@@ -187,5 +190,12 @@ public class MineFirstFragment extends BaseFragment implements Toolbar.OnMenuIte
                 break;
         }
         return true;
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

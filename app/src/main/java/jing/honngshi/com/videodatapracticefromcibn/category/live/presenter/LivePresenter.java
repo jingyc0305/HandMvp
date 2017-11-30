@@ -17,7 +17,7 @@ import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.AbsBasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.cache.Repository;
-import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.GetAllListData;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.BLiveData;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveMultiItem;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.contract.LiveContract;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory;
@@ -36,12 +36,12 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
     }
 
     @Override
-    public Observable<GetAllListData> getLiveData(final boolean update) {
+    public Observable<BLiveData> getLiveData(final boolean update) {
         return Observable
                 .just(getLiveService().getLiveIndexList())
-                .flatMap(new Function<Observable<GetAllListData>, ObservableSource<GetAllListData>>() {
+                .flatMap(new Function<Observable<BLiveData>, ObservableSource<BLiveData>>() {
                     @Override
-                    public ObservableSource<GetAllListData> apply(@NonNull Observable<GetAllListData> resultObservable) throws Exception {
+                    public ObservableSource<BLiveData> apply(@NonNull Observable<BLiveData> resultObservable) throws Exception {
                             Logger.d("===getLiveData===apply========");
                         return Repository
                                 .getICache().getLiveDatas(resultObservable,new DynamicKey("get_live"),new EvictDynamicKey(update))
@@ -55,13 +55,13 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
     }
 
     @Override
-    public List<LiveMultiItem> parseDetailLiveData(GetAllListData.DataBean getAllListData) {
+    public List<LiveMultiItem> parseDetailLiveData(BLiveData.DataBean getAllListData) {
         List<LiveMultiItem> data = new ArrayList<>();
-        GetAllListData.DataBean.RecommendDataBean recommend_data = getAllListData.getRecommend_data();
+        BLiveData.DataBean.RecommendDataBean recommend_data = getAllListData.getRecommend_data();
         // 推荐
         if (recommend_data != null) {
             // TITLE
-            GetAllListData.DataBean.RecommendDataBean.PartitionBean partition = recommend_data.getPartition();
+            BLiveData.DataBean.RecommendDataBean.PartitionBean partition = recommend_data.getPartition();
             if (partition != null) {
                 LiveMultiItem item = new LiveMultiItem();
                 item.setItemType(LiveMultiItem.TITLE);
@@ -71,9 +71,9 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                 data.add(item);
             }
             // ITEM
-            List<GetAllListData.DataBean.RecommendDataBean.LivesBean> lives = recommend_data.getLives();
+            List<BLiveData.DataBean.RecommendDataBean.LivesBean> lives = recommend_data.getLives();
             if (lives != null) {
-                GetAllListData.DataBean.RecommendDataBean.LivesBean live;
+                BLiveData.DataBean.RecommendDataBean.LivesBean live;
                 for (int i = 0; i < 6; i++) {
                     live = lives.get(i);
                     LiveMultiItem item = new LiveMultiItem();
@@ -88,10 +88,10 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                 }
             }
             // BANNER
-            List<GetAllListData.DataBean.RecommendDataBean.BannerDataBean> banner_data = recommend_data.getBanner_data();
+            List<BLiveData.DataBean.RecommendDataBean.BannerDataBean> banner_data = recommend_data.getBanner_data();
             if (banner_data != null) {
                 for (int i = 0; i < banner_data.size(); i++) {
-                    GetAllListData.DataBean.RecommendDataBean.BannerDataBean bannerDataBean = banner_data.get(i);
+                    BLiveData.DataBean.RecommendDataBean.BannerDataBean bannerDataBean = banner_data.get(i);
                     LiveMultiItem item = new LiveMultiItem();
                     item.setItemType(LiveMultiItem.BANNER);
                     item.setBannerTitle(bannerDataBean.getTitle());
@@ -101,7 +101,7 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
             }
             // ITEM
             if (lives != null) {
-                GetAllListData.DataBean.RecommendDataBean.LivesBean live;
+                BLiveData.DataBean.RecommendDataBean.LivesBean live;
                 for (int i = 6; i < 12; i++) {
                     live = lives.get(i);
                     LiveMultiItem item = new LiveMultiItem();
@@ -123,12 +123,12 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
         return data;
     }
 
-    private List<LiveMultiItem> parsePartitions(GetAllListData.DataBean getAllListData){
+    private List<LiveMultiItem> parsePartitions(BLiveData.DataBean getAllListData){
         List<LiveMultiItem> data = new ArrayList<>();
-        List<GetAllListData.DataBean.PartitionsBean> partitions = getAllListData.getPartitions();
+        List<BLiveData.DataBean.PartitionsBean> partitions = getAllListData.getPartitions();
         if (partitions != null) {
             // 娱乐、游戏、手游、绘画
-            for (GetAllListData.DataBean.PartitionsBean partitionsBean : partitions) {
+            for (BLiveData.DataBean.PartitionsBean partitionsBean : partitions) {
                 // TITLE
                 {
                     LiveMultiItem item = new LiveMultiItem();
@@ -139,9 +139,9 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                     data.add(item);
                 }
                 // ITEM
-                List<GetAllListData.DataBean.PartitionsBean.LivesBeanX> lives = partitionsBean.getLives();
+                List<BLiveData.DataBean.PartitionsBean.LivesBeanX> lives = partitionsBean.getLives();
                 if (lives != null) {
-                    GetAllListData.DataBean.PartitionsBean.LivesBeanX live;
+                    BLiveData.DataBean.PartitionsBean.LivesBeanX live;
                     for (int i = 0; i < 6; i++) {
                         live = lives.get(i);
                         LiveMultiItem item = new LiveMultiItem();
@@ -181,11 +181,11 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                 })
                 .observeOn(Schedulers.io())
                 .map(getAllListDataResult ->{
-                    GetAllListData.DataBean getAllListData = getAllListDataResult.getData();
+                    BLiveData.DataBean getAllListData = getAllListDataResult.getData();
                     List<LiveMultiItem> data = new ArrayList<>();
                     Logger.d("======loadLiveData==map=getAllListData = "+getAllListData);
                     if (getAllListData != null) {
-                        List<GetAllListData.DataBean.BannerBean> mBanner = getAllListData.getBanner();
+                        List<BLiveData.DataBean.BannerBean> mBanner = getAllListData.getBanner();
                         List<String> bannerimgs = new ArrayList<>();
                         List<String> bannertitles = new ArrayList<>();
                         if (mBanner != null) {
@@ -237,17 +237,17 @@ public class LivePresenter extends AbsBasePresenter<LiveContract.ILiveView> impl
                 .getLiveIndexList(),new DynamicKey("get_live_data"),new EvictDynamicKey(false))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<GetAllListData>() {
+                .subscribe(new Observer<BLiveData>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull GetAllListData getAllListData) {
+                    public void onNext(@NonNull BLiveData getAllListData) {
                         List<LiveMultiItem> data = new ArrayList<>();
                         if (getAllListData != null) {
-                            List<GetAllListData.DataBean.BannerBean> mBanner = getAllListData.getData().getBanner();
+                            List<BLiveData.DataBean.BannerBean> mBanner = getAllListData.getData().getBanner();
                             List<String> bannerimgs = new ArrayList<>();
                             List<String> bannertitles = new ArrayList<>();
                             if (mBanner != null) {

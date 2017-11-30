@@ -3,16 +3,21 @@ package jing.honngshi.com.videodatapracticefromcibn.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import jing.honngshi.com.videodatapracticefromcibn.R;
+import jing.honngshi.com.videodatapracticefromcibn.category.BottomBar;
 import jing.honngshi.com.videodatapracticefromcibn.category.EventBusActivityScope;
+import jing.honngshi.com.videodatapracticefromcibn.home.MainActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -29,8 +34,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     protected Context mContext;
     //缓存Fragment view
     private View mRootView;
-    private boolean mIsMulti = false;
-
+    private RecyclerView baseRecyclerView;
     protected OnFragmentOpenDrawerListener mOpenDraweListener;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,9 +78,31 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
+        initRecycleView();
         initData();
     }
 
+    private void initRecycleView(){
+        //初始化recycleview
+        Map<String, Object> map = getRecycleView();
+        baseRecyclerView =  (RecyclerView) map.get("RecycleView");
+        if(baseRecyclerView !=null){
+            baseRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    //上滑 并且 正在显示底部栏
+                    BottomBar bottomBar = ((MainActivity)getActivity()).getBottomBar();
+                    if (dy > 0) {
+                        bottomBar.hide();
+                    } else{
+                        bottomBar.show();
+                    }
+                }
+            });
+        }
+
+    }
 //    @Override
 //    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 //        super.onActivityCreated(savedInstanceState);
@@ -109,14 +135,11 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
         }else{
             toolbar.setNavigationIcon(R.drawable.ic_action_navigation_arrow_back_inverted);
         }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOpenDraweListener != null && homeAsUpEnabled) {
-                    mOpenDraweListener.onOpenDrawer();
-                }else{
-                    onBackPressedSupport();
-                }
+        toolbar.setNavigationOnClickListener(v -> {
+            if (mOpenDraweListener != null && homeAsUpEnabled) {
+                mOpenDraweListener.onOpenDrawer();
+            }else{
+                onBackPressedSupport();
             }
         });
     }
@@ -151,4 +174,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
      * 初始化adapter
      */
     protected abstract void initVodByTagAdapter();
+    /**
+     * 获取recycleview
+     */
+    protected abstract Map<String, Object> getRecycleView();
 }

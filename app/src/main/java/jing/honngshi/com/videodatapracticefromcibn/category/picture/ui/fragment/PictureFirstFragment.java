@@ -7,6 +7,9 @@ import android.view.View;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseFragment;
@@ -76,5 +79,12 @@ public class PictureFirstFragment extends BaseFragment {
     }
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

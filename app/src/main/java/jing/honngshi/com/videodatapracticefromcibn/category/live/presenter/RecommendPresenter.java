@@ -1,5 +1,7 @@
 package jing.honngshi.com.videodatapracticefromcibn.category.live.presenter;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +11,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.rx_cache2.DynamicKey;
-import io.rx_cache2.EvictDynamicKey;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.AbsBasePresenter;
-import jing.honngshi.com.videodatapracticefromcibn.cache.Repository;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveRecommend;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveRecommendAppStartAndBanner;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveRecommendMultiItem;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.contract.LiveRecommendContract;
 import jing.honngshi.com.videodatapracticefromcibn.utils.httputil.RetrofitFactory;
 
@@ -26,8 +26,10 @@ import static jing.honngshi.com.videodatapracticefromcibn.utils.httputil.Retrofi
 
 public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
         .ILiveRecommendView> implements LiveRecommendContract.ILiveRecommendPresenter {
+
     LiveRecommendContract.ILiveRecommendView mILiveRecommendView;
 
+    LiveRecommendMultiItem mBannerItem;//banner数据
 
     public RecommendPresenter(LiveRecommendContract.ILiveRecommendView mILiveRecommendView) {
         this.mILiveRecommendView = mILiveRecommendView;
@@ -38,8 +40,7 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
         mILiveRecommendView.showLoading();
         Observable<LiveRecommend> liveRecommendObservable =
                 getRecommendLiveService().getLiveRecommend();
-        Repository.getICache()
-                .getLiveRecommendCacheData(liveRecommendObservable,new DynamicKey("get_live_recommed"),new EvictDynamicKey(false))
+        liveRecommendObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<LiveRecommend>() {
@@ -50,13 +51,15 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
 
                     @Override
                     public void onNext(@NonNull LiveRecommend liveRecommend) {
-                        ArrayList<LiveRecommend.RoomBean.ListBean> roomBeans = getDetailRecommendData(liveRecommend,headerId,startIndex,desIndex);
-                        mILiveRecommendView.showRecommendData(liveRecommend,roomBeans,startIndex,desIndex);
+                        List<LiveRecommendMultiItem> data = new ArrayList<>();
+                        //组装item数据
+                        data.addAll(parseRecommendHeaderData(liveRecommend,headerId, startIndex,desIndex));
+                        //更新ui
+                        mILiveRecommendView.showRecommendDataNew(liveRecommend,data,startIndex,desIndex);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
                         mILiveRecommendView.showNetError();
                     }
 
@@ -65,10 +68,44 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
 
                     }
                 });
+//        Repository.getICache()
+//                .getLiveRecommendCacheData(liveRecommendObservable,new DynamicKey("get_live_recommed"),new EvictDynamicKey(false))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<LiveRecommend>() {
+//                    @Override
+//                    public void onSubscribe(@NonNull Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(@NonNull LiveRecommend liveRecommend) {
+//                        //ArrayList<LiveRecommend.RoomBean.ListBean> roomBeans = getDetailRecommendData(liveRecommend,headerId,startIndex,desIndex);
+//                       // mILiveRecommendView.showRecommendData(liveRecommend,roomBeans,startIndex,desIndex);
+//                        List<LiveRecommendMultiItem> data = new ArrayList<>();
+//                        //头部数据
+//                        data.addAll(parseRecommendHeaderData(liveRecommend));
+//                        //详细数据
+//                        data.addAll(parseRecommendItemData(liveRecommend));
+//                        //更新ui
+//                        mILiveRecommendView.showRecommendDataNew(liveRecommend,data,startIndex,desIndex);
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//
+//                        mILiveRecommendView.showNetError();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
 
     }
 
-    private ArrayList<LiveRecommend.RoomBean.ListBean> getDetailRecommendData(LiveRecommend liveRecommend,int headerId,int startIndex,int desIndex){
+    private ArrayList<LiveRecommend.RoomBean.ListBean> getChangeRecommendData(LiveRecommend liveRecommend,int headerId,int startIndex,int desIndex){
         ArrayList<LiveRecommend.RoomBean.ListBean> roomBeans = new ArrayList<>();
         int i = 0;
         for (LiveRecommend.RoomBean roomBean : liveRecommend.getRoom()) {
@@ -113,14 +150,73 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
         i = 0;
         return roomBeans;
     }
-    private ArrayList<LiveRecommend.RoomBean.ListBean> getDetailRecommendData2(LiveRecommend liveRecommend,int headerId,int startIndex,int desIndex){
-        List<LiveRecommend.RoomBean.ListBean> lists = liveRecommend.getRoom().get(headerId).getList();
-        ArrayList<LiveRecommend.RoomBean.ListBean> roomBeans = new ArrayList<>();
-        for (int j = startIndex;j < desIndex; j++) {
-            roomBeans.add(lists.get(j));
+    /**
+     * 组装不同类型数据
+     * @return
+     */
+    private List<LiveRecommendMultiItem> parseRecommendHeaderData(LiveRecommend liveRecommend,int headerId,int startIndex,int desIndex){
+        List<LiveRecommendMultiItem> data = new ArrayList<>();
+        int i = 0;
+        //组装banner数据
+        if(mBannerItem!=null){
+            data.add(mBannerItem);
         }
-        return roomBeans;
+        for (LiveRecommend.RoomBean roomBean : liveRecommend.getRoom()){
+            if(roomBean.getList().size() >= 4){
+                //组装header
+                LiveRecommendMultiItem multiItem = new LiveRecommendMultiItem();
+                multiItem.setItemType(LiveRecommendMultiItem.RECOMMEND_HEADER);
+                multiItem.setHeader_img_url(roomBean.getIcon());
+                multiItem.setHeader_name(roomBean.getName());
+                multiItem.setHeader_isMore(true);
+                if(i > 0){
+                    //从第二个分割头部开始显示 换一换
+                    multiItem.setShowRefreshBtn(true);
+                }
+                data.add(multiItem);
+                //组装item详细
+                //List<LiveRecommendMultiItem> multiItems = parseRecommendItemData(data,roomBean);
+                //处理换一批数据 处理指定headerid中的数据,循环add每次add 4条
+                if(i == headerId && startIndex !=0){
+                    for (int k = startIndex;k < desIndex; k++) {
+                        parseRecommendItemData(data,roomBean,k);
+                    }
+                }else if(i == headerId &&startIndex == 0){
+                    for (int k = startIndex;k < desIndex; k++) {
+                        parseRecommendItemData(data,roomBean,k);
+                    }
+                }else {
+                    for (int k = 0;k < 4; k++) {
+                        parseRecommendItemData(data,roomBean,k);
+                    }
+                }
+            }
+            i++;
+        }
+        i=0;
+        return data;
     }
+    private LiveRecommendMultiItem parseRecommendBannerData(List<String> bannerimgs,List<String> bannertitles){
+        LiveRecommendMultiItem multiItem = new LiveRecommendMultiItem();
+        multiItem.setItemType(LiveRecommendMultiItem.RECOMMEND_BANNER);
+        multiItem.setBanner_img_url(bannerimgs);
+        multiItem.setBanner_title(bannertitles);
+        return multiItem;
+    }
+    /**
+     * 解析分组内详细 item-list 数据
+     * @return
+     */
+    private void parseRecommendItemData(List<LiveRecommendMultiItem> data,LiveRecommend.RoomBean roomBean,int k){
+        LiveRecommendMultiItem multiItem1 = new LiveRecommendMultiItem();
+        multiItem1.setItemType(LiveRecommendMultiItem.RECOMMEND_ITEM_GRID);
+        multiItem1.setItem_img_url(roomBean.getList().get(k).getLive_thumb());
+        multiItem1.setItem_title(roomBean.getList().get(k).getNick());
+        multiItem1.setItem_sub_title(roomBean.getList().get(k).getTitle());
+        multiItem1.setItem_people_count(roomBean.getList().get(k).getView());
+        data.add(multiItem1);
+    }
+
     @Override
     public void getRecommendBannerData() {
         RetrofitFactory
@@ -138,6 +234,7 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
                     public void onNext(@NonNull LiveRecommendAppStartAndBanner liveRecommendAppStartAndBanner) {
                         List<String> bannerimgs = new ArrayList<>();
                         List<String> bannertitles = new ArrayList<>();
+
                         for (int i = 0 ;i<liveRecommendAppStartAndBanner.getAppfocus().size();i++){
                             //装在bannerurls
                             if(!"".equals(liveRecommendAppStartAndBanner.getAppfocus().get(i).getThumb())){
@@ -148,8 +245,10 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
                             //装在bannerdescrip
                             bannertitles.add(liveRecommendAppStartAndBanner.getAppfocus().get(i).getTitle());
                         }
+                        //设置banner数据
+                        mBannerItem = parseRecommendBannerData(bannerimgs,bannertitles);
                         //更新ui
-                        mILiveRecommendView.showBanner(bannerimgs,bannertitles);
+                        //mILiveRecommendView.showBanner(bannerimgs,bannertitles);
                     }
 
                     @Override
@@ -172,8 +271,22 @@ public class RecommendPresenter extends AbsBasePresenter<LiveRecommendContract
             getRecommendData(headerId,lastStartIndex,lastDesIndex);
         }else{
             //newRoomBeans = getDetailRecommendData2(liveRecommend,headerId,lastStartIndex,lastDesIndex);
-            newRoomBeans = getDetailRecommendData(liveRecommend,headerId,lastStartIndex,lastDesIndex);
+            newRoomBeans = getChangeRecommendData(liveRecommend,headerId,lastStartIndex,lastDesIndex);
             mILiveRecommendView.refreshRecommendData(newRoomBeans,lastStartIndex,lastDesIndex);
         }
+    }
+
+    @Override
+    public void refreshRecommendDataNew(LiveRecommend liveRecommend, int headerId, int
+            lastStartIndex, int lastDesIndex) {
+        Log.i("RefreshData","headerId="+headerId+" / lastStartIndex="+lastStartIndex +" / lastDesIndex="+lastDesIndex);
+        List<LiveRecommendMultiItem> newRoomBeans;
+        if(liveRecommend == null){
+            getRecommendData(headerId,lastStartIndex,lastDesIndex);
+        }else{
+            newRoomBeans = parseRecommendHeaderData(liveRecommend,headerId,lastStartIndex,lastDesIndex);
+            mILiveRecommendView.refreshRecommendDataNew(newRoomBeans,lastStartIndex,lastDesIndex);
+        }
+
     }
 }

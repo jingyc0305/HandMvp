@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
@@ -18,6 +20,7 @@ import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.adapter.LiveViewPageAdapter;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.contract.LiveMainContract;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.presenter.LiveMainPresenter;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveCategoryFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.LiveFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.ui.fragment.RecommendFragment;
 
@@ -34,13 +37,13 @@ public class LiveFragmentMain extends BaseFragment<LiveMainContract.ILiveMainPre
     @BindView(R.id.app_toolbar)
     Toolbar mToolbar;
 
-    ArrayList<Fragment> fragments = new ArrayList<Fragment>();
+    ArrayList<Fragment> fragments = new ArrayList<>();
 
     LiveViewPageAdapter mLiveViewPageAdapter;
 
     LiveMainPresenter mLiveMainPresenter;
 
-    String[] tabTitle = new String[]{"直播", "推荐"};
+    String[] tabTitle = new String[]{"直播", "推荐","分类"};
     public static LiveFragmentMain newInstance() {
 
         Bundle args = new Bundle();
@@ -61,15 +64,18 @@ public class LiveFragmentMain extends BaseFragment<LiveMainContract.ILiveMainPre
         mToolbar.setOnMenuItemClickListener(this);
         fragments.add(LiveFragment.newInstance());
         fragments.add(RecommendFragment.newInstance());
+        fragments.add(LiveCategoryFragment.newInstance());
         mLiveViewPageAdapter = new LiveViewPageAdapter(getChildFragmentManager(), fragments,_mActivity);
         mViewPager.setAdapter(mLiveViewPageAdapter);
 
         //TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         mTabLayout.addTab(mTabLayout.newTab().setText(tabTitle[0]));
         mTabLayout.addTab(mTabLayout.newTab().setText(tabTitle[1]));
+        mTabLayout.addTab(mTabLayout.newTab().setText(tabTitle[2]));
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.getTabAt(0).setText(tabTitle[0]);
         mTabLayout.getTabAt(1).setText(tabTitle[1]);
+        mTabLayout.getTabAt(2).setText(tabTitle[2]);
 
         //设置tab可滑动
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -111,5 +117,12 @@ public class LiveFragmentMain extends BaseFragment<LiveMainContract.ILiveMainPre
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         return false;
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

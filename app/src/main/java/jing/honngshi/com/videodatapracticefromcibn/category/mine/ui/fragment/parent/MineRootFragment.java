@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jing.honngshi.com.videodatapracticefromcibn.R;
 import jing.honngshi.com.videodatapracticefromcibn.base.impl.BaseRootFragment;
 import jing.honngshi.com.videodatapracticefromcibn.category.TabSelectedEvent;
@@ -66,5 +69,12 @@ public class MineRootFragment extends BaseRootFragment {
     }
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

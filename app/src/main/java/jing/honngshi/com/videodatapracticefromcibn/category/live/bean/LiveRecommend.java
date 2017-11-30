@@ -286,6 +286,7 @@ public class LiveRecommend {
              * app_shuffling_image : http://static01.quanmin
              * .tv/201709/65097d34-f070-44d2-8f67-fe8c15cda237.jpg
              */
+
             private String headerIcon;
             //是否显示更多
             private boolean isShowMore;

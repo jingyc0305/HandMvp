@@ -17,6 +17,8 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import jing.honngshi.com.videodatapracticefromcibn.R;
@@ -214,5 +216,12 @@ public class VodFragmentMain extends BaseFragment implements
                 break;
         }
         return true;
+    }
+    @Override
+    protected Map<String, Object> getRecycleView() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("RecyclerView", null);
+        return map;
     }
 }

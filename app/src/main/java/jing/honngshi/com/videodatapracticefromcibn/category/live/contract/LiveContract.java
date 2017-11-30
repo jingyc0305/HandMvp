@@ -5,7 +5,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import jing.honngshi.com.videodatapracticefromcibn.base.BasePresenter;
 import jing.honngshi.com.videodatapracticefromcibn.base.BaseView;
-import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.GetAllListData;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.BLiveData;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveMultiItem;
 
 /**
@@ -24,9 +24,9 @@ public interface LiveContract {
 
     interface ILivePresenter extends BasePresenter<ILiveView> {
 
-        Observable<GetAllListData> getLiveData(boolean update);
+        Observable<BLiveData> getLiveData(boolean update);
 
-        List<LiveMultiItem> parseDetailLiveData(GetAllListData.DataBean getAllListData);
+        List<LiveMultiItem> parseDetailLiveData(BLiveData.DataBean getAllListData);
 
 
     }

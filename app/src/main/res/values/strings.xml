@@ -114,6 +114,7 @@
     <string-array name="tab_titles_main_home">
         <item>直播</item>
         <item>推荐</item>
+        <item>分类</item>
     </string-array>
     <string-array name="query_suggestions">
         <item>Android</item>

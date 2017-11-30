@@ -7,7 +7,7 @@ import io.reactivex.Observable;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 import io.rx_cache2.LifeCache;
-import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.GetAllListData;
+import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.BLiveData;
 import jing.honngshi.com.videodatapracticefromcibn.category.live.bean.LiveRecommend;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryBean;
 import jing.honngshi.com.videodatapracticefromcibn.category.vod.bean.CategoryTagBean;
@@ -66,7 +66,7 @@ public interface ICacheProviders {
      * @return
      */
     @LifeCache(duration = 5, timeUnit = TimeUnit.MINUTES)
-    Observable<GetAllListData> getLiveDatas(Observable<GetAllListData> data, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
+    Observable<BLiveData> getLiveDatas(Observable<BLiveData> data, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
     /**
      * 缓存直播推荐数据
      * @param dynamicKey

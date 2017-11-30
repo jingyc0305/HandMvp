@@ -1,7 +1,6 @@
 package jing.honngshi.com.videodatapracticefromcibn.home;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -84,7 +83,6 @@ public class MainActivity extends BaseActivity implements NavigationView
 
     private SupportFragment[] mFragments = new SupportFragment[5];
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -101,6 +99,10 @@ public class MainActivity extends BaseActivity implements NavigationView
         if (!isHasPremission) {
             MainActivityPermissionsDispatcher.getMainMultiPermissionWithPermissionCheck(this);
         }
+    }
+
+    public BottomBar getBottomBar() {
+        return mBottomBar;
     }
 
     @Override
@@ -162,14 +164,11 @@ public class MainActivity extends BaseActivity implements NavigationView
         //View nav_header_view = mNavigationView.getHeaderView(0);
         //mNavigationView.addHeaderView(nav_header_view);
         userAvatar = (ImageView) nav_header_view.findViewById(R.id.user_avatar);
-        userAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(JingApp.isLogined){
-                    //换头像
-                }else{
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
+        userAvatar.setOnClickListener(view -> {
+            if(JingApp.isLogined){
+                //换头像
+            }else{
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
         userNickName = (TextView) nav_header_view.findViewById(R.id.user_nickname);
@@ -180,11 +179,11 @@ public class MainActivity extends BaseActivity implements NavigationView
 
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setCheckedItem(R.id.drawer_vod);
-        mBottomBar.addItem(new BottomBarTab(this, R.mipmap.type_vod_normal, R.string.type_vod))
-                .addItem(new BottomBarTab(this, R.mipmap.type_live_normal, R.string.type_live))
-                .addItem(new BottomBarTab(this, R.mipmap.type_news_normal, R.string.type_news))
-                .addItem(new BottomBarTab(this, R.mipmap.type_pic_normal, R.string.type_picture))
-                .addItem(new BottomBarTab(this, R.mipmap.mine_normal, R.string.type_mine));
+        mBottomBar.addItem(new BottomBarTab(this, R.drawable.vector_drawable_vod, R.string.type_vod))
+                .addItem(new BottomBarTab(this, R.drawable.vector_drawable_live, R.string.type_live))
+                .addItem(new BottomBarTab(this, R.drawable.vector_drawable_news, R.string.type_news))
+                .addItem(new BottomBarTab(this, R.drawable.vector_drawable_pic, R.string.type_picture))
+                .addItem(new BottomBarTab(this, R.drawable.vector_drawable_mine, R.string.type_mine));
 
         mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
@@ -362,18 +361,8 @@ public class MainActivity extends BaseActivity implements NavigationView
     @OnShowRationale({Manifest.permission.READ_EXTERNAL_STORAGE})
     void showRationableToUser(final PermissionRequest permissionRequest) {
         new AlertDialog.Builder(this)
-                .setPositiveButton("行的", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        permissionRequest.proceed();
-                    }
-                })
-                .setNegativeButton("不行", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        permissionRequest.cancel();
-                    }
-                })
+                .setPositiveButton("行的", (dialog, which) -> permissionRequest.proceed())
+                .setNegativeButton("不行", (dialog, which) -> permissionRequest.cancel())
                 .setCancelable(false)
                 .setMessage("为了正常使用,请给这个权限,谢谢.")
                 .show();
@@ -434,4 +423,5 @@ public class MainActivity extends BaseActivity implements NavigationView
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
 }

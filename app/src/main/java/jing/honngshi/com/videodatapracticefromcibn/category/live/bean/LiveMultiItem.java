@@ -42,9 +42,9 @@ public class LiveMultiItem implements MultiItemEntity {
             case BANNER:
                 spanSize = 2;
                 break;
-//            case BOTTOM:
-//                spanSize = 2;
-//                break;
+            //            case BOTTOM:
+            //                spanSize = 2;
+            //                break;
         }
     }
 
